@@ -5,7 +5,7 @@ services:
     env: python
     region: oregon
     plan: starter
-    branch: main
+    branch: master
     buildCommand: "./build.sh"
     startCommand: "gunicorn config.wsgi:application"
 
@@ -40,7 +40,7 @@ services:
     env: node
     region: oregon
     plan: starter
-    branch: main
+    branch: master
     buildCommand: "cd frontend && npm install && VITE_API_URL=https://xbpneus-backend.onrender.com npm run build"
     startCommand: "cd frontend && npx serve -s dist -l $PORT"
 

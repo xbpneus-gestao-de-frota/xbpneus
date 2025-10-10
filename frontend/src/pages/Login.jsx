@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { login, getUserRole } from "../api/auth";
-import { getDefaultDashboard } from "../config/permissions";
+import { login } from "../api/auth";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,17 +15,11 @@ export default function Login() {
     setLoading(true);
     setMsg("");
     try {
-      const { accessToken, refreshToken } = await login(username, senha);
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-
-      const decodedToken = jwtDecode(accessToken);
-      const userRole = decodedToken.role;
-      const dashboard = getDefaultDashboard(userRole);
+      const { userRole, redirectUrl } = await login(username, senha);
 
       console.log("Login successful. User Role:", userRole);
-      console.log("Redirecting to Dashboard:", dashboard);
-      nav(dashboard, { replace: true });
+      console.log("Redirecting to Dashboard:", redirectUrl);
+      nav(redirectUrl, { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
       if (error.response && error.response.data && error.response.data.detail) {

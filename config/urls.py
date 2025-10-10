@@ -11,6 +11,7 @@ urlpatterns = [
     path("api/create-test-users-temp/", temp_user_creation_views.create_test_users_temp, name="create-test-users-temp"),
     path("api/run-migrations-temp/", temp_migrate_views.run_migrations, name="run-migrations-temp"),
     path("api/show-migrations-temp/", temp_migrate_views.show_migrations, name="show-migrations-temp"),
+    path("api/make-migrations-temp/", temp_migrate_views.make_migrations, name="make-migrations-temp"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     path("admin/", admin.site.urls),

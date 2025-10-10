@@ -92,3 +92,44 @@ def show_migrations(request):
             'message': str(e)
         }, status=500)
 
+
+
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def make_migrations(request):
+    """
+    Endpoint para criar migrations
+    """
+    secret = request.headers.get('X-Migration-Secret')
+    expected_secret = os.environ.get('TEMP_MIGRATION_SECRET', 'xbpneus-migrate-2025')
+    
+    if secret != expected_secret:
+        return JsonResponse({
+            'error': 'Unauthorized',
+            'message': 'Invalid secret key'
+        }, status=401)
+    
+    try:
+        # Criar migrations
+        result = subprocess.run(
+            ['python', 'manage.py', 'makemigrations'],
+            capture_output=True,
+            text=True,
+            timeout=120
+        )
+        
+        return JsonResponse({
+            'success': result.returncode == 0,
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+            'returncode': result.returncode
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'error': 'Exception',
+            'message': str(e)
+        }, status=500)
+

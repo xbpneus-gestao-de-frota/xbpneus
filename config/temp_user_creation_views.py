@@ -48,7 +48,8 @@ def create_test_users_temp(request):
             created_users.append(data['username'])
 
     if created_users:
-        return Response({'detail': f'Test users created: {', '.join(created_users)}'}, status=status.HTTP_201_CREATED)
+        users_list = ', '.join(created_users)
+        return Response({'detail': f'Test users created: {users_list}'}, status=status.HTTP_201_CREATED)
     else:
         return Response({'detail': 'All test users already exist.'}, status=status.HTTP_200_OK)
 

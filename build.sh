@@ -12,7 +12,18 @@ python manage.py collectstatic --no-input
 # Run migrations
 python manage.py migrate
 
+# Create superuser if it doesn't exist
+python manage.py shell <<EOF
+import os
+from django.contrib.auth import get_user_model
 
-# Create superuser (temporary, will be removed after creation)
-python manage.py createsuperuser --noinput --username admin --email admin@xbpneus.com || true
+User = get_user_model()
+
+username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'admin')
+email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@xbpneus.com')
+password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'Teste@2025')
+
+if not User.objects.filter(username=username).exists():
+    User.objects.create_superuser(username, email, password)
+EOF
 

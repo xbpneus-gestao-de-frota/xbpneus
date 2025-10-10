@@ -16,7 +16,7 @@ class NormaComplianceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = NormaComplianceSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -36,7 +36,7 @@ class AuditoriaComplianceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = AuditoriaComplianceSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -56,7 +56,7 @@ class NaoConformidadeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = NaoConformidadeSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -76,7 +76,7 @@ class PlanoAcaoComplianceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = PlanoAcaoComplianceSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']

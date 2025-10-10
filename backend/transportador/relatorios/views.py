@@ -16,7 +16,7 @@ class RelatorioTemplateViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RelatorioTemplateSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -36,7 +36,7 @@ class RelatorioAgendadoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RelatorioAgendadoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -56,7 +56,7 @@ class RelatorioGeradoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RelatorioGeradoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -76,7 +76,7 @@ class DashboardPersonalizadoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = DashboardPersonalizadoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']

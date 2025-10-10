@@ -23,7 +23,7 @@ class CategoriaProdutoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CategoriaProdutoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['codigo', 'nome']
     
     def get_queryset(self):
@@ -37,7 +37,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ProdutoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'categoria', 'ativo']
+    filterset_fields = ['categoria', 'ativo']
     search_fields = ['codigo', 'descricao', 'codigo_barras']
     ordering_fields = ['codigo', 'descricao', 'custo_medio']
     

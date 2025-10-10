@@ -16,7 +16,7 @@ class TipoEPIViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = TipoEPISerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -36,7 +36,7 @@ class EPIViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = EPISerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -56,7 +56,7 @@ class EntregaEPIViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = EntregaEPISerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -76,7 +76,7 @@ class FichaEPIViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = FichaEPISerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']

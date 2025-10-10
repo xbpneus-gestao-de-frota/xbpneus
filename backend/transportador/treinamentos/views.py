@@ -16,7 +16,7 @@ class CursoTreinamentoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CursoTreinamentoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -36,7 +36,7 @@ class TreinamentoRealizadoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = TreinamentoRealizadoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -56,7 +56,7 @@ class CertificadoTreinamentoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CertificadoTreinamentoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']
@@ -76,7 +76,7 @@ class InstrutorTreinamentoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = InstrutorTreinamentoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'ativo']
+    filterset_fields = ['ativo']
     search_fields = ['nome', 'descricao']
     ordering_fields = ['nome', 'criado_em']
     ordering = ['-criado_em']

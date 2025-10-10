@@ -315,7 +315,7 @@ class ConfiguracaoAuditoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = ConfiguracaoAuditoriaSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['empresa']
+    filterset_fields = []
     
     def get_queryset(self):
         """Retorna todas as configurações"""

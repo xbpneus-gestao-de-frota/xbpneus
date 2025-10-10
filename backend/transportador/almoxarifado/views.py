@@ -23,7 +23,7 @@ class AlmoxarifadoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = AlmoxarifadoSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'tipo', 'ativo']
+    filterset_fields = ['tipo', 'ativo']
     search_fields = ['codigo', 'nome', 'cidade']
     ordering_fields = ['nome', 'codigo']
     ordering = ['nome']

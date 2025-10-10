@@ -27,7 +27,7 @@ class NotaFiscalViewSet(viewsets.ModelViewSet):
     
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['empresa', 'tipo', 'status', 'modelo']
+    filterset_fields = ['tipo', 'status', 'modelo']
     search_fields = ['numero', 'serie', 'destinatario_nome', 'chave_acesso']
     ordering_fields = ['data_emissao', 'numero', 'valor_total']
     ordering = ['-data_emissao']

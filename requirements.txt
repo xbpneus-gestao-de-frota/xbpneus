@@ -49,5 +49,7 @@ xlsxwriter==3.2.0
 # Validations
 validators==0.22.0
 
-django-filters==24.1
+
+
+django-filter
 

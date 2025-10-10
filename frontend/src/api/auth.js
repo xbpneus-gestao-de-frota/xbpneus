@@ -1,86 +1,64 @@
 import api from "./http";
+import { jwtDecode } from "jwt-decode";
 
-// Função para detectar o tipo de usuário pelo e-mail
-function detectUserType(email) {
-  // Verifica padrões no e-mail para determinar o tipo
-  const lowerEmail = email.toLowerCase();
-  
-  if (lowerEmail.includes('transportador') || lowerEmail.includes('admin')) {
-    return 'transportador';
-  } else if (lowerEmail.includes('motorista')) {
-    return 'motorista';
-  } else if (lowerEmail.includes('borracharia')) {
-    return 'borracharia';
-  } else if (lowerEmail.includes('revenda')) {
-    return 'revenda';
-  } else if (lowerEmail.includes('recapagem')) {
-    return 'recapagem';
+export async function login(email, password) {
+  try {
+    const { data } = await api.post("/api/token/", { email, password });
+    const accessToken = data.access;
+    const refreshToken = data.refresh;
+
+    localStorage.setItem("access_token", accessToken);
+    localStorage.setItem("refresh_token", refreshToken);
+
+    // Decodificar o token para obter o user_id e user_role
+    const decodedToken = jwtDecode(accessToken);
+    const userRole = decodedToken.user_role; // Assumindo que o papel do usuário está no token
+    const userId = decodedToken.user_id;
+
+    localStorage.setItem("user_role", userRole);
+    localStorage.setItem("user_id", userId);
+
+    // Redirecionar para o dashboard apropriado com base no papel
+    let redirectUrl = "/dashboard"; // Default
+    if (userRole) {
+      redirectUrl = `/${userRole}/dashboard`;
+    }
+    localStorage.setItem("redirect_url", redirectUrl);
+
+    // Opcional: buscar dados completos do usuário se necessário
+    // const userData = await api.get(`/api/users/${userId}/`);
+    // localStorage.setItem("user_data", JSON.stringify(userData.data));
+
+    return { userRole, redirectUrl };
+  } catch (error) {
+    console.error("Erro no login:", error);
+    throw error;
   }
-  
-  // Se não conseguir detectar, tenta todos os endpoints
-  return null;
 }
 
-export async function login(username, password){
-  const userType = detectUserType(username);
-  
-  // Se conseguiu detectar o tipo, usa o endpoint específico
-  if (userType) {
-    const url = `/api/${userType}/login/`;
-    try {
-      const { data } = await api.post(url, { email: username, password });
-      // A resposta vem com tokens.access e tokens.refresh
-      const accessToken = data.tokens?.access || data.access;
-      const refreshToken = data.tokens?.refresh || data.refresh;
-      
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("refresh_token", refreshToken);
-      localStorage.setItem("user_role", userType);
-      localStorage.setItem("user_data", JSON.stringify(data.user || {}));
-      localStorage.setItem("redirect_url", data.redirect || `/${userType}/dashboard/`);
-      return data;
-    } catch (error) {
-      console.error(`Erro no login (${userType}):`, error);
-      throw error;
-    }
-  }
-  
-  // Se não conseguiu detectar, tenta todos os endpoints
-  const types = ['transportador', 'motorista', 'borracharia', 'revenda', 'recapagem'];
-  
-  for (const type of types) {
-    try {
-      const url = `/api/${type}/login/`;
-      const { data } = await api.post(url, { email: username, password });
-      // A resposta vem com tokens.access e tokens.refresh
-      const accessToken = data.tokens?.access || data.access;
-      const refreshToken = data.tokens?.refresh || data.refresh;
-      
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("refresh_token", refreshToken);
-      localStorage.setItem("user_role", type);
-      localStorage.setItem("user_data", JSON.stringify(data.user || {}));
-      localStorage.setItem("redirect_url", data.redirect || `/${type}/dashboard/`);
-      return data;
-    } catch (error) {
-      // Continua tentando outros tipos
-      continue;
-    }
-  }
-  
-  // Se nenhum funcionou, lança erro
-  throw new Error("Credenciais inválidas");
-}
-
-export function logout(){
+export function logout() {
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
   localStorage.removeItem("user_role");
+  localStorage.removeItem("user_id");
   localStorage.removeItem("user_data");
+  localStorage.removeItem("redirect_url");
+}
+
+export function getAccessToken() {
+  return localStorage.getItem("access_token");
+}
+
+export function getRefreshToken() {
+  return localStorage.getItem("refresh_token");
 }
 
 export function getUserRole() {
   return localStorage.getItem("user_role");
+}
+
+export function getUserId() {
+  return localStorage.getItem("user_id");
 }
 
 export function getUserData() {

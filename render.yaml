@@ -9,7 +9,7 @@ services:
     buildCommand: "./build.sh"
     startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 2 --timeout 120"
     healthCheckPath: /healthz/
-    postDeployCommand: "python manage.py createsuperuser --noinput --username admin --email admin@xbpneus.com || true"
+    postDeployCommand: ""
 
     envVars: 
       - key: PYTHON_VERSION

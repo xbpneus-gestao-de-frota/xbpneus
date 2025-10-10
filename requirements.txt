@@ -56,3 +56,6 @@ django-filter
 
 python-json-logger
 
+
+drf-spectacular-sidecar
+

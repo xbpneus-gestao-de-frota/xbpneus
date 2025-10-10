@@ -52,11 +52,7 @@ export default function App(){
       <Route path="/cadastro/tipo" element={<CadastroTipoCliente />} />
 
       {/* Rotas para Transportador */}
-      <Route path="/dashboard" element={
-        <ProtectedRoute allowedRoles={['transportador']}>
-          <RequireAuth><LayoutTransportador /></RequireAuth>
-        </ProtectedRoute>
-      }>
+      <Route path="/dashboard" element={<ProtectedRoute allowedRoles={["transportador"]}><RequireAuth><LayoutTransportador /></RequireAuth></ProtectedRoute>}>
         <Route index element={<IndexTransportador />} />
         <Route path="frota" element={<Frota />} />
         <Route path="frota/veiculos" element={<VeiculosList />} />

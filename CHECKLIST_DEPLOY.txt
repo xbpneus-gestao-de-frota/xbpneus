@@ -1,0 +1,87 @@
+================================================================================
+                    CHECKLIST DE DEPLOY - SISTEMA XBPNEUS
+================================================================================
+
+PRE-DEPLOY
+==========
+
+GitHub:
+[ ] Repositorio criado no GitHub
+[ ] Git configurado localmente
+[ ] Remote adicionado
+[ ] .gitignore verificado
+[ ] Commit inicial feito
+[ ] Push para GitHub concluido
+
+Codigo:
+[ ] Testes executados e aprovados (10/10)
+[ ] Paginas de autenticacao preservadas
+[ ] Assets presentes (mascotes, logos)
+[ ] Validacoes implementadas
+[ ] render.yaml configurado
+[ ] build.sh executavel
+
+DEPLOY NO RENDER
+================
+
+Conta:
+[ ] Conta criada no Render
+[ ] GitHub conectado
+[ ] Repositorio xbpneus selecionado
+
+Blueprint:
+[ ] Blueprint aplicado (render.yaml)
+[ ] Backend criado
+[ ] Frontend criado
+[ ] PostgreSQL criado
+[ ] Redis criado
+
+Variaveis Backend:
+[ ] DJANGO_SETTINGS_MODULE=config.production
+[ ] SECRET_KEY (auto)
+[ ] DEBUG=False
+[ ] ALLOWED_HOSTS configurado
+[ ] DATABASE_URL (auto)
+[ ] REDIS_URL (auto)
+[ ] CORS_ALLOWED_ORIGINS configurado
+
+Variaveis Frontend:
+[ ] NODE_VERSION=22.13.0
+[ ] VITE_API_BASE (URL do backend)
+
+POS-DEPLOY
+==========
+
+Verificacao:
+[ ] Backend respondendo (/healthz/)
+[ ] Frontend carregando
+[ ] Admin acessivel
+[ ] Superusuario criado
+
+Testes Funcionais:
+[ ] Login funcionando
+[ ] Cadastro funcionando
+[ ] Pos-Cadastro funcionando
+[ ] Dashboard carregando
+[ ] CRUD de veiculos funcionando
+[ ] CRUD de pneus funcionando
+
+Verificacao Visual:
+[ ] Login com cores corretas
+[ ] Cadastro com cores corretas
+[ ] Pos-Cadastro com cores corretas
+[ ] Mascotes com tamanho correto
+[ ] Campo "Tipo de Cliente" VISIVEL
+[ ] Campos de senha VISIVEIS
+[ ] Texto dos inputs azul escuro
+[ ] Fundo pos-cadastro ESTATICO
+
+================================================================================
+                        DEPLOY CONCLUIDO COM SUCESSO!
+================================================================================
+
+Data: ___/___/______
+Responsavel: _________________
+Frontend: _________________
+Backend: _________________
+

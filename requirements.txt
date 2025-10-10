@@ -1,44 +1,53 @@
-# Django Core
-Django>=4.2,<5.0
-django-environ>=0.11.0
+# Dependências de Produção - Sistema XBPneus
+
+# Core
+Django==4.2.11
+djangorestframework==3.14.0
+python-decouple==3.8
 
 # Database
-dj-database-url>=2.0.0
-psycopg2-binary>=2.9.0
+psycopg2-binary==2.9.9  # PostgreSQL
+dj-database-url==2.1.0
 
-# Django REST Framework
-djangorestframework>=3.14.0
-djangorestframework-simplejwt>=5.3.0
+# Authentication & Security
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.3.1
+django-axes==6.1.1
+cryptography==42.0.5
 
 # API Documentation
-drf-spectacular>=0.27.0
-drf-spectacular-sidecar>=2024.1.1
+drf-spectacular==0.27.1
 
-# CORS
-django-cors-headers>=4.3.0
-
-# Static Files
-whitenoise>=6.6.0
-
-# Health Checks
-django-health-check>=3.18.0
+# Cache & Performance
+django-redis==5.4.0
+redis==5.0.3
+hiredis==2.3.2
 
 # Background Jobs
-django-rq>=2.10.0
-redis>=5.0.0
+django-rq==2.10.2
+rq==1.16.2
 
-# Security
-django-axes>=6.1.0
+# File Storage
+Pillow==10.2.0
 
-# Logging
-python-json-logger>=2.0.0
+# Monitoring & Logging
+sentry-sdk==1.43.0
 
-# Monitoring (optional)
-sentry-sdk>=1.40.0
+# Server
+gunicorn==21.2.0
+whitenoise==6.6.0
 
-# WSGI Server
-gunicorn>=21.2.0
+# Utilities
+django-filter==24.1
+python-dateutil==2.9.0
+pytz==2024.1
 
-# Utils
-python-decouple>=3.8
-requests>=2.31.0
+# Excel/CSV
+openpyxl==3.1.2
+xlsxwriter==3.2.0
+
+# Validations
+validators==0.22.0
+
+django-filters==24.1
+

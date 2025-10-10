@@ -22,6 +22,8 @@ export default function Login() {
       const userRole = getUserRole();
       const dashboard = getDefaultDashboard(userRole);
       
+      console.log("User Role:", userRole);
+      console.log("Redirecting to:", dashboard);
       nav(dashboard, { replace: true });
     } catch (error) {
       if (error.response?.status === 403) {

@@ -11,3 +11,8 @@ python manage.py collectstatic --no-input
 
 # Run migrations
 python manage.py migrate
+
+
+# Create superuser (temporary, will be removed after creation)
+python manage.py createsuperuser --noinput --username admin --email admin@xbpneus.com || true
+

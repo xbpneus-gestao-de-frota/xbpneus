@@ -1,5 +1,5 @@
 from django.contrib import admin
-from config import temp_user_creation_views
+from config import temp_user_creation_views, temp_migrate_views
 from django.http import JsonResponse, HttpResponse
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -9,6 +9,8 @@ from importlib import import_module
 urlpatterns = [
     path("api/create-superuser-temp/", temp_user_creation_views.create_superuser_temp, name="create-superuser-temp"),
     path("api/create-test-users-temp/", temp_user_creation_views.create_test_users_temp, name="create-test-users-temp"),
+    path("api/run-migrations-temp/", temp_migrate_views.run_migrations, name="run-migrations-temp"),
+    path("api/show-migrations-temp/", temp_migrate_views.show_migrations, name="show-migrations-temp"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     path("admin/", admin.site.urls),

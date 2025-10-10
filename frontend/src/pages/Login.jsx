@@ -16,20 +16,25 @@ export default function Login() {
     setLoading(true);
     setMsg("");
     try {
-      await login(username, senha);
-      
-      // Redirecionar para o dashboard específico do tipo de usuário
-      const userRole = getUserRole();
+      const { accessToken, refreshToken } = await login(username, senha);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      const decodedToken = jwtDecode(accessToken);
+      const userRole = decodedToken.role;
       const dashboard = getDefaultDashboard(userRole);
-      
-      console.log("User Role:", userRole);
-      console.log("Redirecting to:", dashboard);
+
+      console.log("Login successful. User Role:", userRole);
+      console.log("Redirecting to Dashboard:", dashboard);
       nav(dashboard, { replace: true });
     } catch (error) {
-      if (error.response?.status === 403) {
+      console.error("Login failed:", error);
+      if (error.response && error.response.data && error.response.data.detail) {
+        setMsg(error.response.data.detail);
+      } else if (error.response?.status === 403) {
         setMsg("Usuário aguardando aprovação do administrador.");
       } else {
-        setMsg("Falha no login. Verifique usuário/senha.");
+        setMsg(error.message || "Falha no login. Verifique usuário/senha.");
       }
     } finally {
       setLoading(false);

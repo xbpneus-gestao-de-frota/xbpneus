@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { login, getUserRole } from "../api/auth";
 import { getDefaultDashboard } from "../config/permissions";
 

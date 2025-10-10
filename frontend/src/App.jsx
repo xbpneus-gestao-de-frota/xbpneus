@@ -1,0 +1,130 @@
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Cadastro from "./pages/Cadastro";
+import CadastroTipoCliente from "./pages/CadastroTipoCliente";
+import PosCadastro from "./pages/PosCadastro";
+
+import RequireAuth from "./components/RequireAuth";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LayoutTransportador from "./components/LayoutTransportador";
+
+// Dashboards por tipo de usuário
+import DashboardMotorista from "./pages/motorista/DashboardMotorista";
+import DashboardRevenda from "./pages/revenda/DashboardRevenda";
+import DashboardBorracharia from "./pages/borracharia/DashboardBorracharia";
+import DashboardRecapagem from "./pages/recapagem/DashboardRecapagem";
+
+import IndexTransportador from "./pages/transportador/Index";
+import Frota from "./pages/transportador/Frota";
+import Pneus from "./pages/transportador/Pneus";
+import Estoque from "./pages/transportador/Estoque";
+import Manutencao from "./pages/transportador/Manutencao";
+import Financeiro from "./pages/transportador/Financeiro";
+import Compras from "./pages/transportador/Compras";
+import Eventos from "./pages/transportador/Eventos";
+import Relatorios from "./pages/transportador/Relatorios";
+import Configuracoes from "./pages/transportador/Configuracoes";
+
+import VeiculosList from "./pages/transportador/frota/VeiculosList";
+import VehicleDetail from "./pages/transportador/frota/VehicleDetail";
+import PosicoesList from "./pages/transportador/frota/PosicoesList";
+
+import PneusList from "./pages/transportador/pneus/PneusList";
+import AplicacoesList from "./pages/transportador/pneus/AplicacoesList";
+
+import MovimentacoesList from "./pages/transportador/estoque/MovimentacoesList";
+
+import OSList from "./pages/transportador/manutencao/OSList";
+import TestesList from "./pages/transportador/manutencao/TestesList";
+
+// IA - Análise de Pneus
+import IADashboard from "./pages/transportador/ia/Dashboard";
+import IAAnalise from "./pages/transportador/ia/Analise";
+import IAGamificacao from "./pages/transportador/ia/Gamificacao";
+import IAGarantias from "./pages/transportador/ia/Garantias";
+
+export default function App(){
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/pos-cadastro" element={<PosCadastro />} />
+      <Route path="/cadastro/tipo" element={<CadastroTipoCliente />} />
+
+      {/* Rotas para Transportador */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute allowedRoles={['transportador']}>
+          <RequireAuth><LayoutTransportador /></RequireAuth>
+        </ProtectedRoute>
+      }>
+        <Route index element={<IndexTransportador />} />
+        <Route path="frota" element={<Frota />} />
+        <Route path="frota/veiculos" element={<VeiculosList />} />
+        <Route path="frota/veiculos/:id" element={<VehicleDetail />} />
+        <Route path="frota/posicoes" element={<PosicoesList />} />
+
+        <Route path="pneus" element={<Pneus />} />
+        <Route path="pneus/lista" element={<PneusList />} />
+        <Route path="pneus/aplicacoes" element={<AplicacoesList />} />
+
+        <Route path="estoque" element={<Estoque />} />
+        <Route path="estoque/movimentacoes" element={<MovimentacoesList />} />
+
+        <Route path="manutencao" element={<Manutencao />} />
+        <Route path="manutencao/os" element={<OSList />} />
+        <Route path="manutencao/testes" element={<TestesList />} />
+
+        {/* IA - Análise de Pneus */}
+        <Route path="ia" element={<IADashboard />} />
+        <Route path="ia/analise" element={<IAAnalise />} />
+        <Route path="ia/gamificacao" element={<IAGamificacao />} />
+        <Route path="ia/garantias" element={<IAGarantias />} />
+
+        <Route path="financeiro" element={<Financeiro />} />
+        <Route path="compras" element={<Compras />} />
+        <Route path="eventos" element={<Eventos />} />
+        <Route path="relatorios" element={<Relatorios />} />
+        <Route path="configuracoes" element={<Configuracoes />} />
+      </Route>
+
+      {/* Rota para Motorista */}
+      <Route path="/motorista/dashboard" element={
+        <ProtectedRoute allowedRoles={['motorista']}>
+          <RequireAuth><DashboardMotorista /></RequireAuth>
+        </ProtectedRoute>
+      } />
+
+      {/* Rota para Revenda */}
+      <Route path="/revenda/dashboard" element={
+        <ProtectedRoute allowedRoles={['revenda']}>
+          <RequireAuth><DashboardRevenda /></RequireAuth>
+        </ProtectedRoute>
+      } />
+
+      {/* Rota para Borracharia */}
+      <Route path="/borracharia/dashboard" element={
+        <ProtectedRoute allowedRoles={['borracharia']}>
+          <RequireAuth><DashboardBorracharia /></RequireAuth>
+        </ProtectedRoute>
+      } />
+
+      {/* Rota para Recapagem */}
+      <Route path="/recapagem/dashboard" element={
+        <ProtectedRoute allowedRoles={['recapagem']}>
+          <RequireAuth><DashboardRecapagem /></RequireAuth>
+        </ProtectedRoute>
+      } />
+
+      {/* Manter compatibilidade com rota antiga */}
+      <Route path="/app/transportador" element={
+        <ProtectedRoute allowedRoles={['transportador']}>
+          <RequireAuth><LayoutTransportador /></RequireAuth>
+        </ProtectedRoute>
+      }>
+        <Route index element={<IndexTransportador />} />
+      </Route>
+
+      <Route path="*" element={<Login />} />
+    </Routes>
+  );
+}

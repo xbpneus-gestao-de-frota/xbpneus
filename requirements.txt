@@ -19,9 +19,9 @@ cryptography==42.0.5
 drf-spectacular==0.27.1
 
 # Cache & Performance
-django-redis==5.4.0
-redis==5.0.3
-hiredis==2.3.2
+django-redis==5.2.0
+redis==4.5.5
+
 
 # Background Jobs
 django-rq==2.10.2
@@ -61,4 +61,8 @@ drf-spectacular-sidecar
 
 
 django-health-check
+
+
+
+hiredis==2.0.0
 

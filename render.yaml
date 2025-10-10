@@ -16,7 +16,7 @@ services:
       - key: DEBUG
         value: False
       - key: DJANGO_SETTINGS_MODULE
-        value: config.production
+        value: config.render_production
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS

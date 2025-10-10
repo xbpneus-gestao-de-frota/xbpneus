@@ -7,21 +7,28 @@ services:
     plan: starter
     branch: master
     buildCommand: "./build.sh"
-    startCommand: "gunicorn config.wsgi:application"
-
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 2 --timeout 120"
+    healthCheckPath: /healthz/
 
     envVars: 
       - key: PYTHON_VERSION
         value: 3.11.0
       - key: DEBUG
         value: False
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.production
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
-        value: "*"
+        value: .onrender.com
       - key: DATABASE_URL
         fromDatabase:
           name: xbpneus-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: xbpneus-redis
           property: connectionString
       - key: DJANGO_DEBUG
         value: False
@@ -31,28 +38,50 @@ services:
         value: True
       - key: SECURE_SSL_REDIRECT
         value: True
+      - key: SECURE_HSTS_SECONDS
+        value: 31536000
+      - key: SECURE_HSTS_INCLUDE_SUBDOMAINS
+        value: True
+      - key: SECURE_HSTS_PRELOAD
+        value: True
       - key: PAGE_SIZE
         value: 20
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://xbpneus-frontend.onrender.com
+      - key: CORS_ALLOW_CREDENTIALS
+        value: True
 
   # Frontend React
   - type: web
     name: xbpneus-frontend
-    env: node
+    env: static
     region: oregon
     plan: starter
     branch: master
-    buildCommand: "cd frontend && npm install && VITE_API_URL=https://xbpneus-backend.onrender.com npm run build"
-    startCommand: "cd frontend && npx serve -s dist -l $PORT"
-
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: ./frontend/dist
+    
     envVars: 
       - key: NODE_VERSION
         value: 22.13.0
       - key: VITE_API_URL
         value: https://xbpneus-backend.onrender.com
 
+  # Redis (Key Value)
+  - type: keyvalue
+    name: xbpneus-redis
+    region: oregon
+    plan: starter
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: Allow all connections
+
 databases:
   - name: xbpneus-db
     databaseName: xbpneus
     user: xbpneus
     region: oregon
-    plan: free
+    plan: starter
+    postgresMajorVersion: 16
+

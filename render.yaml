@@ -57,7 +57,7 @@ services:
     env: static
     branch: master
     rootDir: frontend
-    buildCommand: "npm ci && npm run build"
+    buildCommand: "npm ci --include=dev && npm run build"
     staticPublishPath: ./dist
     
     envVars: 

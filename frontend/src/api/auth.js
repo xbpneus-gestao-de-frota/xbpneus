@@ -21,10 +21,13 @@ export async function login(email, password) {
     localStorage.setItem("user_id", userId);
 
     // Redirecionar para o dashboard apropriado com base no papel
-    let redirectUrl = "/dashboard"; // Default
-    if (userRole) {
+    let redirectUrl = "/dashboard"; // Default para transportador
+    
+    // Outros tipos de usuários têm rotas específicas
+    if (userRole && userRole !== 'transportador') {
       redirectUrl = `/${userRole}/dashboard`;
     }
+    
     localStorage.setItem("redirect_url", redirectUrl);
 
     // Opcional: buscar dados completos do usuário se necessário

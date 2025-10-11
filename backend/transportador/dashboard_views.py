@@ -26,51 +26,51 @@ def dashboard_view(request):
     
     # Dados mockados para o dashboard do transportador
     dashboard_data = {
-        \'usuario\': {
-            \'email\': user.email,
-            \'nome\': getattr(user, \'nome_razao_social\', user.email),
-            \'tipo\': \'transportador\'
+        'usuario': {
+            'email': user.email,
+            'nome': getattr(user, 'nome_razao_social', user.email),
+            'tipo': 'transportador'
         },
-        \'frota\': {
-            \'total_veiculos\': 15,
-            \'veiculos_ativos\': 12,
-            \'veiculos_manutencao\': 2,
-            \'veiculos_inativos\': 1,
-            \'precisam_manutencao\': 3,
-            \'veiculos_alerta\': [
-                {\'placa\': \'ABC-1234\', \'modelo\': \'Caminhão A\', \'km_restante\': 500},
-                {\'placa\': \'DEF-5678\', \'modelo\': \'Caminhão B\', \'km_restante\': 800}
+        'frota': {
+            'total_veiculos': 15,
+            'veiculos_ativos': 12,
+            'veiculos_manutencao': 2,
+            'veiculos_inativos': 1,
+            'precisam_manutencao': 3,
+            'veiculos_alerta': [
+                {'placa': 'ABC-1234', 'modelo': 'Caminhão A', 'km_restante': 500},
+                {'placa': 'DEF-5678', 'modelo': 'Caminhão B', 'km_restante': 800}
             ]
         },
-        \'pneus\': {
-            \'total_posicoes\': 120,
-            \'posicoes_ocupadas\': 100,
-            \'posicoes_vazias\': 20,
-            \'taxa_ocupacao\': 83.3
+        'pneus': {
+            'total_posicoes': 120,
+            'posicoes_ocupadas': 100,
+            'posicoes_vazias': 20,
+            'taxa_ocupacao': 83.3
         },
-        \'manutencao\': {
-            \'os_abertas\': 5,
-            \'os_em_andamento\': 3,
-            \'os_atrasadas\': 1,
-            \'total_pendentes\': 8,
-            \'ultimas_os\': [
-                {\'numero\': \'OS001\', \'veiculo_placa\': \'ABC-1234\', \'tipo\': \'Preventiva\', \'status\': \'ABERTA\', \'prioridade\': \'ALTA\', \'data_abertura\': \'2025-10-10T10:00:00Z\'},
-                {\'numero\': \'OS002\', \'veiculo_placa\': \'DEF-5678\', \'tipo\': \'Corretiva\', \'status\': \'EM_ANDAMENTO\', \'prioridade\': \'MEDIA\', \'data_abertura\': \'2025-10-09T14:30:00Z\'}
+        'manutencao': {
+            'os_abertas': 5,
+            'os_em_andamento': 3,
+            'os_atrasadas': 1,
+            'total_pendentes': 8,
+            'ultimas_os': [
+                {'numero': 'OS001', 'veiculo_placa': 'ABC-1234', 'tipo': 'Preventiva', 'status': 'ABERTA', 'prioridade': 'ALTA', 'data_abertura': '2025-10-10T10:00:00Z'},
+                {'numero': 'OS002', 'veiculo_placa': 'DEF-5678', 'tipo': 'Corretiva', 'status': 'EM_ANDAMENTO', 'prioridade': 'MEDIA', 'data_abertura': '2025-10-09T14:30:00Z'}
             ]
         },
-        \'estoque\': {
-            \'entradas_30d\': 50,
-            \'saidas_30d\': 30,
-            \'saldo_30d\': 20,
-            \'ultimas_movimentacoes\': [
-                {\'tipo\': \'ENTRADA\', \'data\': \'2025-10-10T11:00:00Z\', \'observacoes\': \'Recebimento de pneus novos\'},
-                {\'tipo\': \'SAIDA\', \'data\': \'2025-10-09T16:00:00Z\', \'observacoes\': \'Envio para manutenção\'}
+        'estoque': {
+            'entradas_30d': 50,
+            'saidas_30d': 30,
+            'saldo_30d': 20,
+            'ultimas_movimentacoes': [
+                {'tipo': 'ENTRADA', 'data': '2025-10-10T11:00:00Z', 'observacoes': 'Recebimento de pneus novos'},
+                {'tipo': 'SAIDA', 'data': '2025-10-09T16:00:00Z', 'observacoes': 'Envio para manutenção'}
             ]
         },
-        \'alertas\': {
-            \'veiculos_manutencao\': 2,
-            \'os_atrasadas\': 1,
-            \'veiculos_precisam_manutencao\': 3
+        'alertas': {
+            'veiculos_manutencao': 2,
+            'os_atrasadas': 1,
+            'veiculos_precisam_manutencao': 3
         }
     }
     

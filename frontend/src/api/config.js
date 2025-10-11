@@ -11,9 +11,11 @@ export const API_ENDPOINTS = {
     registerFull: `${API_BASE_URL}/api/users/register_full/`,
   },
   auth: {
-    login: `${API_BASE_URL}/api/auth/login/`,
+    login: `${API_BASE_URL}/api/transportador/login/`,
     logout: `${API_BASE_URL}/api/auth/logout/`,
     me: `${API_BASE_URL}/api/auth/me/`,
+    dashboard: `${API_BASE_URL}/api/transportador/dashboard/`,
+    profile: `${API_BASE_URL}/api/transportador/profile/`,
   },
   
   // Transportador

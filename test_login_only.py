@@ -22,25 +22,30 @@ class Colors:
     BOLD = '\033[1m'
 
 TEST_LOGINS = {
+    "transportador": {
+        "email": "teste_transportador@xbpneus.com",
+        "password": "SenhaSegura123",
+        "endpoint": "/api/transportador/login/"
+    },
     "motorista": {
         "email": "teste_motorista@xbpneus.com",
         "password": "SenhaSegura123",
-        "endpoint": "/api/motorista/login/"
+        "endpoint": "/api/transportador/login/"
     },
     "borracharia": {
         "email": "teste_borracharia@xbpneus.com",
         "password": "SenhaSegura123",
-        "endpoint": "/api/borracharia/login/"
+        "endpoint": "/api/transportador/login/"
     },
     "revenda": {
         "email": "teste_revenda@xbpneus.com",
         "password": "SenhaSegura123",
-        "endpoint": "/api/revenda/login/"
+        "endpoint": "/api/transportador/login/"
     },
     "recapagem": {
         "email": "teste_recapagem@xbpneus.com",
         "password": "SenhaSegura123",
-        "endpoint": "/api/recapagem/login/"
+        "endpoint": "/api/transportador/login/"
     }
 }
 

@@ -8,11 +8,26 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
         
         # Verifica se o usuário está aprovado (exceto superusuários)
-        if not self.user.is_superuser and not self.user.aprovado:
-            raise serializers.ValidationError(
-                "Usuário aguardando aprovação do administrador. "
-                "Por favor, aguarde a aprovação para acessar o sistema."
-            )
+        if not self.user.is_superuser:
+            # Lista de tipos de usuários que possuem campo 'aprovado'
+            user_types = [
+                'usuariotransportador',
+                'usuariomotorista', 
+                'usuarioborracharia',
+                'usuariorevenda',
+                'usuariorecapagem'
+            ]
+            
+            # Verifica cada tipo de usuário através do relacionamento reverso
+            for user_type in user_types:
+                if hasattr(self.user, user_type):
+                    user_profile = getattr(self.user, user_type)
+                    if hasattr(user_profile, 'aprovado') and not user_profile.aprovado:
+                        raise serializers.ValidationError(
+                            "Usuário aguardando aprovação do administrador. "
+                            "Por favor, aguarde a aprovação para acessar o sistema."
+                        )
+                    break  # Encontrou o tipo de usuário, não precisa continuar
         
         return data
     

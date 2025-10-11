@@ -24,12 +24,17 @@ import Compras from "./pages/transportador/Compras";
 import Eventos from "./pages/transportador/Eventos";
 import Relatorios from "./pages/transportador/Relatorios";
 import Configuracoes from "./pages/transportador/Configuracoes";
+import MinhaEmpresa from "./pages/transportador/MinhaEmpresa";
 
 import VeiculosList from "./pages/transportador/frota/VeiculosList";
+import VeiculoCreate from "./pages/transportador/frota/VeiculoCreate";
+import VeiculoEdit from "./pages/transportador/frota/VeiculoEdit";
 import VehicleDetail from "./pages/transportador/frota/VehicleDetail";
 import PosicoesList from "./pages/transportador/frota/PosicoesList";
 
 import PneusList from "./pages/transportador/pneus/PneusList";
+import PneuCreate from "./pages/transportador/pneus/PneuCreate";
+import PneuEdit from "./pages/transportador/pneus/PneuEdit";
 import AplicacoesList from "./pages/transportador/pneus/AplicacoesList";
 
 import MovimentacoesList from "./pages/transportador/estoque/MovimentacoesList";
@@ -56,11 +61,15 @@ export default function App(){
         <Route index element={<IndexTransportador />} />
         <Route path="frota" element={<Frota />} />
         <Route path="frota/veiculos" element={<VeiculosList />} />
+        <Route path="frota/veiculos/create" element={<VeiculoCreate />} />
+        <Route path="frota/veiculos/:id/edit" element={<VeiculoEdit />} />
         <Route path="frota/veiculos/:id" element={<VehicleDetail />} />
         <Route path="frota/posicoes" element={<PosicoesList />} />
 
         <Route path="pneus" element={<Pneus />} />
         <Route path="pneus/lista" element={<PneusList />} />
+        <Route path="pneus/create" element={<PneuCreate />} />
+        <Route path="pneus/:id/edit" element={<PneuEdit />} />
         <Route path="pneus/aplicacoes" element={<AplicacoesList />} />
 
         <Route path="estoque" element={<Estoque />} />
@@ -81,6 +90,7 @@ export default function App(){
         <Route path="eventos" element={<Eventos />} />
         <Route path="relatorios" element={<Relatorios />} />
         <Route path="configuracoes" element={<Configuracoes />} />
+        <Route path="minha-empresa" element={<MinhaEmpresa />} />
       </Route>
 
       {/* Rota para Motorista */}

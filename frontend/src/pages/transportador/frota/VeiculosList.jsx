@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useTryFetch from "../../../hooks/useTryFetch";
 import DataTable from "../../../components/DataTable";
 import ColumnPicker from "../../../components/ColumnPicker";
@@ -8,13 +9,16 @@ import Loader from "../../../components/Loader";
 import ErrorState from "../../../components/ErrorState";
 import EmptyState from "../../../components/EmptyState";
 import PageHeader from "../../../components/PageHeader";
+import api from "../../../api/http";
 
 const CANDIDATES = ["/api/transportador/frota/veiculos/", "/api/frota/veiculos/", "/api/veiculos/"];
 const MOCK = ()=>[{ id:1, placa:'ABC1D23', modelo:'Cavalo Mecânico', km:458200, motorista:'João Silva' }];
 
 export default function ListPage(){
+  const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [ordering, setOrdering] = useState("placa");
+  const [deleting, setDeleting] = useState(null);
 
   const [placa, setPlaca] = useState("");
   const [modelo, setModelo] = useState("");
@@ -27,7 +31,58 @@ export default function ListPage(){
   if (motorista) params.motorista = motorista;
   const { data, error, loading, simulated, usedEndpoint, meta, page, setPage } = useTryFetch(CANDIDATES, { mock: MOCK, params, paginated: true, initialPage: 1, pageSize: 20 });
 
-  const cols = [{"key": "id", "label": "ID"}, {"key": "placa", "label": "Placa"}, {"key": "modelo", "label": "Modelo"}, {"key": "km", "label": "Km"}, {"key": "motorista", "label": "Motorista"}, {"key":"acao","label":"Ação","linkTo":"/app/transportador/frota/veiculos/:id"}];
+  const handleDelete = async (id, placa) => {
+    if (!confirm(`Tem certeza que deseja excluir o veículo ${placa}?`)) return;
+    
+    setDeleting(id);
+    try {
+      await api.delete(`/api/transportador/frota/veiculos/${id}/`);
+      window.location.reload();
+    } catch (ex) {
+      alert("Erro ao excluir veículo.");
+      console.error(ex);
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  const cols = [
+    {"key": "id", "label": "ID"}, 
+    {"key": "placa", "label": "Placa"}, 
+    {"key": "modelo", "label": "Modelo"}, 
+    {"key": "marca", "label": "Marca"},
+    {"key": "tipo", "label": "Tipo"},
+    {"key": "status", "label": "Status"},
+    {"key": "km", "label": "KM"}, 
+    {"key": "motorista", "label": "Motorista"},
+    {
+      "key": "acoes",
+      "label": "Ações",
+      "render": (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(`/dashboard/frota/veiculos/${row.id}`)}
+            className="px-3 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600"
+          >
+            Ver
+          </button>
+          <button
+            onClick={() => navigate(`/dashboard/frota/veiculos/${row.id}/edit`)}
+            className="px-3 py-1 text-sm rounded bg-green-500 text-white hover:bg-green-600"
+          >
+            Editar
+          </button>
+          <button
+            onClick={() => handleDelete(row.id, row.placa)}
+            disabled={deleting === row.id}
+            className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
+          >
+            {deleting === row.id ? "..." : "Excluir"}
+          </button>
+        </div>
+      )
+    }
+  ];
   const [selectedCols, setSelectedCols] = useState(cols.map(c=>c.label));
   useEffect(()=>{ try{ const saved = localStorage.getItem('cols:'+window.location.pathname); if(saved){ setSelectedCols(JSON.parse(saved)); } }catch{} }, []);
   const visibleCols = cols.filter(c => selectedCols.includes(c.label));
@@ -35,21 +90,31 @@ export default function ListPage(){
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <PageHeader 
-        title="Veículos" 
-        subtitle="Gestão da frota de veículos"
-      >
-        {usedEndpoint && (
-          <span className="text-xs text-gray-500">
-            Endpoint: {usedEndpoint}
-          </span>
-        )}
-        {simulated && (
-          <span className="text-xs text-orange-500 font-medium">
-            ⚠️ Modo simulado
-          </span>
-        )}
-      </PageHeader>
+      <div className="flex items-center justify-between mb-6">
+        <PageHeader 
+          title="Veículos" 
+          subtitle="Gestão da frota de veículos"
+        >
+          {usedEndpoint && (
+            <span className="text-xs text-gray-500">
+              Endpoint: {usedEndpoint}
+            </span>
+          )}
+          {simulated && (
+            <span className="text-xs text-orange-500 font-medium">
+              ⚠️ Modo simulado
+            </span>
+          )}
+        </PageHeader>
+        
+        <button
+          onClick={() => navigate("/dashboard/frota/veiculos/create")}
+          className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+        >
+          <span className="text-xl">+</span>
+          Novo Veículo
+        </button>
+      </div>
 
       {/* Filtros e controles */}
       <div className="bg-white rounded-xl shadow-md p-4 mb-6">

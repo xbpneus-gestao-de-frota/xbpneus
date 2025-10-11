@@ -5,8 +5,7 @@ export async function login(email, password) {
   try {
     const { data } = await api.post("/api/token/", { email, password }, {
       headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
       }
     });
     const accessToken = data.access;

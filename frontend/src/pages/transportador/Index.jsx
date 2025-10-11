@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import api from "../../api/http";
 
 function Card({ title, value }) {
@@ -15,7 +15,7 @@ export default function IndexTransportador(){
   const [err, setErr] = useState(null);
   useEffect(()=>{
     let mounted = true;
-    api.get("/api/transportador/dashboard/metrics/")
+    api.get("/api/transportador/dashboard/") // Corrigido para a rota correta
       .then(r => { if (mounted) setM(r.data); })
       .catch(e => { if (mounted) setErr(e); });
     return () => { mounted = false; }

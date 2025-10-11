@@ -28,13 +28,14 @@ export default function IndexTransportador(){
       {!m && !err && <div className="opacity-70 text-sm">Carregando métricas…</div>}
       {m && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card title="Veículos" value={m.vehicles} />
-          <Card title="Posições" value={m.positions} />
-          <Card title="Pneus" value={m.tires} />
-          <Card title="Aplicações" value={m.applications} />
-          <Card title="Mov. Estoque" value={m.stock_moves} />
-          <Card title="OS" value={m.work_orders} />
-          <Card title="Testes" value={m.tests} />
+          <Card title="Total Veículos" value={m.frota.total_veiculos} />
+          <Card title="Veículos Ativos" value={m.frota.veiculos_ativos} />
+          <Card title="Total Posições" value={m.pneus.total_posicoes} />
+          <Card title="Posições Ocupadas" value={m.pneus.posicoes_ocupadas} />
+          <Card title="OS Abertas" value={m.manutencao.os_abertas} />
+          <Card title="OS Em Andamento" value={m.manutencao.os_em_andamento} />
+          <Card title="Entradas (30d)" value={m.estoque.entradas_30d} />
+          <Card title="Saídas (30d)" value={m.estoque.saidas_30d} />
         </div>
       )}
     </section>

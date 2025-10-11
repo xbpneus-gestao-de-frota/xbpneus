@@ -3,7 +3,12 @@ import { jwtDecode } from "jwt-decode";
 
 export async function login(email, password) {
   try {
-    const { data } = await api.post("/api/token/", { email, password });
+    const { data } = await api.post("/api/token/", { email, password }, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    });
     const accessToken = data.access;
     const refreshToken = data.refresh;
 

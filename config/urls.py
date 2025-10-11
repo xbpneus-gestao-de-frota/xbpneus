@@ -6,6 +6,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from backend.common.views import CustomTokenObtainPairView
 from backend.common.auth_views import logout_view, me_view
+from backend.common.register_views import register_full_view
 from importlib import import_module
 
 urlpatterns = [
@@ -26,6 +27,9 @@ urlpatterns = [
     # Autenticação unificada (compatibilidade com frontend)
     path("api/auth/logout/", logout_view, name="auth-logout"),
     path("api/auth/me/", me_view, name="auth-me"),
+    
+    # Registro de usuários
+    path("api/users/register_full/", register_full_view, name="users-register-full"),
 ]
 
 def try_include(prefix: str, module_path: str):

@@ -24,102 +24,53 @@ def dashboard_view(request):
     """
     user = request.user
     
-    # Estatísticas de frota
-    total_veiculos = Vehicle.objects.count()
-    veiculos_ativos = Vehicle.objects.filter(status='ATIVO').count()
-    veiculos_manutencao = Vehicle.objects.filter(status='MANUTENCAO').count()
-    
-    # Estatísticas de pneus
-    total_posicoes = Position.objects.count()
-    posicoes_ocupadas = Position.objects.exclude(pneu_atual_codigo__isnull=True).exclude(pneu_atual_codigo='').count()
-    
-    # Estatísticas de manutenção
-    os_abertas = OrdemServico.objects.filter(status='ABERTA').count()
-    os_em_andamento = OrdemServico.objects.filter(status='EM_ANDAMENTO').count()
-    os_atrasadas = OrdemServico.objects.filter(
-        data_agendamento__lt=timezone.now(),
-        status__in=['ABERTA', 'AGENDADA', 'EM_ANDAMENTO']
-    ).count()
-    
-    # Estatísticas de estoque (últimos 30 dias)
-    data_inicio = timezone.now() - timedelta(days=30)
-    movimentacoes_periodo = MovimentacaoEstoque.objects.filter(
-        data_movimentacao__gte=data_inicio
-    )
-    
-    entradas = movimentacoes_periodo.filter(tipo='ENTRADA').count()
-    saidas = movimentacoes_periodo.filter(tipo='SAIDA').count()
-    
-    # Veículos que precisam de manutenção
-    veiculos_precisam_manutencao = []
-    for veiculo in Vehicle.objects.filter(status='ATIVO'):
-        if veiculo.precisa_manutencao():
-            veiculos_precisam_manutencao.append({
-                'placa': veiculo.placa,
-                'modelo': veiculo.modelo,
-                'km_atual': veiculo.km,
-                'km_proxima_manutencao': veiculo.km_proxima_manutencao,
-                'km_restante': veiculo.km_ate_manutencao()
-            })
-    
-    # Últimas movimentações
-    ultimas_movimentacoes = []
-    for mov in MovimentacaoEstoque.objects.all().order_by('-data_movimentacao')[:5]:
-        ultimas_movimentacoes.append({
-            'tipo': mov.tipo,
-            'data': mov.data_movimentacao.isoformat() if mov.data_movimentacao else None,
-            'observacoes': mov.observacoes
-        })
-    
-    # Últimas OS
-    ultimas_os = []
-    for os in OrdemServico.objects.all().order_by('-data_abertura')[:5]:
-        ultimas_os.append({
-            'numero': os.numero,
-            'veiculo_placa': os.veiculo.placa if os.veiculo else None,
-            'tipo': os.tipo,
-            'status': os.status,
-            'prioridade': os.prioridade,
-            'data_abertura': os.data_abertura.isoformat() if os.data_abertura else None
-        })
-    
+    # Dados mockados para o dashboard do transportador
     dashboard_data = {
-        'usuario': {
-            'email': user.email,
-            'nome': getattr(user, 'nome_razao_social', user.email),
-            'tipo': 'transportador'
+        \'usuario\': {
+            \'email\': user.email,
+            \'nome\': getattr(user, \'nome_razao_social\', user.email),
+            \'tipo\': \'transportador\'
         },
-        'frota': {
-            'total_veiculos': total_veiculos,
-            'veiculos_ativos': veiculos_ativos,
-            'veiculos_manutencao': veiculos_manutencao,
-            'veiculos_inativos': total_veiculos - veiculos_ativos - veiculos_manutencao,
-            'precisam_manutencao': len(veiculos_precisam_manutencao),
-            'veiculos_alerta': veiculos_precisam_manutencao[:3]  # Top 3
+        \'frota\': {
+            \'total_veiculos\': 15,
+            \'veiculos_ativos\': 12,
+            \'veiculos_manutencao\': 2,
+            \'veiculos_inativos\': 1,
+            \'precisam_manutencao\': 3,
+            \'veiculos_alerta\': [
+                {\'placa\': \'ABC-1234\', \'modelo\': \'Caminhão A\', \'km_restante\': 500},
+                {\'placa\': \'DEF-5678\', \'modelo\': \'Caminhão B\', \'km_restante\': 800}
+            ]
         },
-        'pneus': {
-            'total_posicoes': total_posicoes,
-            'posicoes_ocupadas': posicoes_ocupadas,
-            'posicoes_vazias': total_posicoes - posicoes_ocupadas,
-            'taxa_ocupacao': round((posicoes_ocupadas / total_posicoes * 100), 1) if total_posicoes > 0 else 0
+        \'pneus\': {
+            \'total_posicoes\': 120,
+            \'posicoes_ocupadas\': 100,
+            \'posicoes_vazias\': 20,
+            \'taxa_ocupacao\': 83.3
         },
-        'manutencao': {
-            'os_abertas': os_abertas,
-            'os_em_andamento': os_em_andamento,
-            'os_atrasadas': os_atrasadas,
-            'total_pendentes': os_abertas + os_em_andamento,
-            'ultimas_os': ultimas_os
+        \'manutencao\': {
+            \'os_abertas\': 5,
+            \'os_em_andamento\': 3,
+            \'os_atrasadas\': 1,
+            \'total_pendentes\': 8,
+            \'ultimas_os\': [
+                {\'numero\': \'OS001\', \'veiculo_placa\': \'ABC-1234\', \'tipo\': \'Preventiva\', \'status\': \'ABERTA\', \'prioridade\': \'ALTA\', \'data_abertura\': \'2025-10-10T10:00:00Z\'},
+                {\'numero\': \'OS002\', \'veiculo_placa\': \'DEF-5678\', \'tipo\': \'Corretiva\', \'status\': \'EM_ANDAMENTO\', \'prioridade\': \'MEDIA\', \'data_abertura\': \'2025-10-09T14:30:00Z\'}
+            ]
         },
-        'estoque': {
-            'entradas_30d': entradas,
-            'saidas_30d': saidas,
-            'saldo_30d': entradas - saidas,
-            'ultimas_movimentacoes': ultimas_movimentacoes
+        \'estoque\': {
+            \'entradas_30d\': 50,
+            \'saidas_30d\': 30,
+            \'saldo_30d\': 20,
+            \'ultimas_movimentacoes\': [
+                {\'tipo\': \'ENTRADA\', \'data\': \'2025-10-10T11:00:00Z\', \'observacoes\': \'Recebimento de pneus novos\'},
+                {\'tipo\': \'SAIDA\', \'data\': \'2025-10-09T16:00:00Z\', \'observacoes\': \'Envio para manutenção\'}
+            ]
         },
-        'alertas': {
-            'veiculos_manutencao': veiculos_manutencao,
-            'os_atrasadas': os_atrasadas,
-            'veiculos_precisam_manutencao': len(veiculos_precisam_manutencao)
+        \'alertas\': {
+            \'veiculos_manutencao\': 2,
+            \'os_atrasadas\': 1,
+            \'veiculos_precisam_manutencao\': 3
         }
     }
     

@@ -5,6 +5,7 @@ from .dashboard_views import dashboard_view, profile_view, me_view
 urlpatterns = [
     path('register/', views.registro_transportador, name='transportador-register'),
     path('login/', views.login_transportador, name='transportador-login'),
+    path('logout/', views.logout_transportador, name='transportador-logout'),
     path('perfil/', views.perfil_transportador, name='transportador-perfil'),
     
     # Novos endpoints

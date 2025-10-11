@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from backend.common.jwt_utils import create_tokens_for_user, get_dashboard_redirect
 from django.contrib.auth import authenticate
@@ -89,4 +89,22 @@ def perfil_transportador(request):
     
     serializer = UsuarioTransportadorSerializer(request.user)
     return Response(serializer.data)
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_transportador(request):
+    """Endpoint para logout de transportador"""
+    try:
+        # Invalidar token se estiver usando JWT com blacklist
+        # Por enquanto, apenas retorna sucesso pois o token expira naturalmente
+        return Response({
+            'message': 'Logout realizado com sucesso'
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({
+            'error': str(e)
+        }, status=status.HTTP_400_BAD_REQUEST)
 

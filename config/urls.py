@@ -5,6 +5,7 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from backend.common.views import CustomTokenObtainPairView
+from backend.common.auth_views import logout_view, me_view
 from importlib import import_module
 
 urlpatterns = [
@@ -17,9 +18,14 @@ urlpatterns = [
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     path("admin/", admin.site.urls),
     
+    # Autenticação JWT
     path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    
+    # Autenticação unificada (compatibilidade com frontend)
+    path("api/auth/logout/", logout_view, name="auth-logout"),
+    path("api/auth/me/", me_view, name="auth-me"),
 ]
 
 def try_include(prefix: str, module_path: str):

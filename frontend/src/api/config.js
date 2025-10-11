@@ -11,9 +11,12 @@ export const API_ENDPOINTS = {
     registerFull: `${API_BASE_URL}/api/users/register_full/`,
   },
   auth: {
+    // Login específico do transportador
     login: `${API_BASE_URL}/api/transportador/login/`,
+    // Endpoints unificados de autenticação
     logout: `${API_BASE_URL}/api/auth/logout/`,
     me: `${API_BASE_URL}/api/auth/me/`,
+    // Endpoints específicos do transportador
     dashboard: `${API_BASE_URL}/api/transportador/dashboard/`,
     profile: `${API_BASE_URL}/api/transportador/profile/`,
   },

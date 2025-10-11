@@ -1,3 +1,10 @@
 Pillow
 django-filter
 
+
+
+dj_database_url
+sentry_sdk
+python-json-logger
+djangorestframework
+djangorestframework-simplejwt

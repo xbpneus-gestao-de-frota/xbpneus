@@ -40,6 +40,9 @@ import AplicacoesList from "./pages/transportador/pneus/AplicacoesList";
 import MovimentacoesList from "./pages/transportador/estoque/MovimentacoesList";
 
 import OSList from "./pages/transportador/manutencao/OSList";
+import OSCreate from "./pages/transportador/manutencao/OSCreate";
+import OSEdit from "./pages/transportador/manutencao/OSEdit";
+import OSDetail from "./pages/transportador/manutencao/OSDetail";
 import TestesList from "./pages/transportador/manutencao/TestesList";
 
 // IA - Análise de Pneus
@@ -76,7 +79,10 @@ export default function App(){
         <Route path="estoque/movimentacoes" element={<MovimentacoesList />} />
 
         <Route path="manutencao" element={<Manutencao />} />
-        <Route path="manutencao/os" element={<OSList />} />
+        <Route path="manutencao/ordens-servico" element={<OSList />} />
+        <Route path="manutencao/ordens-servico/create" element={<OSCreate />} />
+        <Route path="manutencao/ordens-servico/:id/edit" element={<OSEdit />} />
+        <Route path="manutencao/ordens-servico/:id" element={<OSDetail />} />
         <Route path="manutencao/testes" element={<TestesList />} />
 
         {/* IA - Análise de Pneus */}

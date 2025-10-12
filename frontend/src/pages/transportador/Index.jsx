@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import api from "../../api/http";
+import AlertasWidget from "../../components/AlertasWidget";
 
 function Card({ title, value }) {
   return (
@@ -15,7 +16,7 @@ export default function IndexTransportador(){
   const [err, setErr] = useState(null);
   useEffect(()=>{
     let mounted = true;
-    api.get("/api/transportador/dashboard/") // Corrigido para a rota correta
+    api.get("/api/transportador/dashboard/")
       .then(r => { if (mounted) setM(r.data); })
       .catch(e => { if (mounted) setErr(e); });
     return () => { mounted = false; }
@@ -24,6 +25,9 @@ export default function IndexTransportador(){
     <section>
       <h1 className="text-3xl font-extrabold mb-4 bg-clip-text text-transparent"
           style={{ backgroundImage: "var(--xbp-grad)" }}>Painel do Transportador</h1>
+      
+      <AlertasWidget />
+      
       {err && <div className="text-sm text-red-400">Falha ao carregar métricas.</div>}
       {!m && !err && <div className="opacity-70 text-sm">Carregando métricas…</div>}
       {m && (
@@ -41,3 +45,4 @@ export default function IndexTransportador(){
     </section>
   );
 }
+

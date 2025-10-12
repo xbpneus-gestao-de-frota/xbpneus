@@ -8,6 +8,9 @@ import ErrorState from "../../../components/ErrorState";
 import EmptyState from "../../../components/EmptyState";
 import PageHeader from "../../../components/PageHeader";
 import api from "../../../api/http";
+import MontarPneuModal from "../../../components/modals/MontarPneuModal";
+import DesmontarPneuModal from "../../../components/modals/DesmontarPneuModal";
+import MedicaoModal from "../../../components/modals/MedicaoModal";
 
 const CANDIDATES = ["/api/transportador/pneus/pneus/", "/api/transportador/pneus/", "/api/pneus/"];
 const MOCK = ()=>[{ id:11, codigo:'XBRI-29580225', medida:'295/80R22.5', dot:'2424', status:'Em uso', posicao_atual:'Dianteiro Esq' }];
@@ -17,6 +20,9 @@ export default function ListPage(){
   const [q, setQ] = useState("");
   const [ordering, setOrdering] = useState("codigo");
   const [deleting, setDeleting] = useState(null);
+  const [montarModal, setMontarModal] = useState({ open: false, pneu: null });
+  const [desmontarModal, setDesmontarModal] = useState({ open: false, pneu: null });
+  const [medicaoModal, setMedicaoModal] = useState({ open: false, pneu: null });
 
   const [medida, setMedida] = useState("");
   const [status, setStatus] = useState("");
@@ -52,9 +58,18 @@ export default function ListPage(){
       "key": "acoes",
       "label": "Ações",
       "render": (row) => (
-        <div className="flex items-center gap-2">
-          <button onClick={() => navigate(`/dashboard/pneus/${row.id}/edit`)} className="px-3 py-1 text-sm rounded bg-green-500 text-white hover:bg-green-600">Editar</button>
-          <button onClick={() => handleDelete(row.id, row.codigo)} disabled={deleting === row.id} className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50">{deleting === row.id ? "..." : "Excluir"}</button>
+        <div className="flex items-center gap-1 flex-wrap">
+          {row.status === 'ESTOQUE' && (
+            <button onClick={() => setMontarModal({ open: true, pneu: row })} className="px-2 py-1 text-xs rounded bg-blue-500 text-white hover:bg-blue-600">Montar</button>
+          )}
+          {row.status === 'MONTADO' && (
+            <>
+              <button onClick={() => setDesmontarModal({ open: true, pneu: row })} className="px-2 py-1 text-xs rounded bg-orange-500 text-white hover:bg-orange-600">Desmontar</button>
+              <button onClick={() => setMedicaoModal({ open: true, pneu: row })} className="px-2 py-1 text-xs rounded bg-purple-500 text-white hover:bg-purple-600">Medir</button>
+            </>
+          )}
+          <button onClick={() => navigate(`/dashboard/pneus/${row.id}/edit`)} className="px-2 py-1 text-xs rounded bg-green-500 text-white hover:bg-green-600">Editar</button>
+          <button onClick={() => handleDelete(row.id, row.codigo)} disabled={deleting === row.id} className="px-2 py-1 text-xs rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50">{deleting === row.id ? "..." : "Excluir"}</button>
         </div>
       )
     }
@@ -113,6 +128,27 @@ export default function ListPage(){
           <button onClick={()=>setPage(p=> meta.next ? p+1 : p)} disabled={!meta.next} className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity">Próxima →</button>
         </div>
       )}
+
+      <MontarPneuModal 
+        isOpen={montarModal.open} 
+        onClose={() => setMontarModal({ open: false, pneu: null })} 
+        onSuccess={() => window.location.reload()}
+        pneuId={montarModal.pneu?.id}
+      />
+      
+      <DesmontarPneuModal 
+        isOpen={desmontarModal.open} 
+        onClose={() => setDesmontarModal({ open: false, pneu: null })} 
+        onSuccess={() => window.location.reload()}
+        pneu={desmontarModal.pneu}
+      />
+      
+      <MedicaoModal 
+        isOpen={medicaoModal.open} 
+        onClose={() => setMedicaoModal({ open: false, pneu: null })} 
+        onSuccess={() => window.location.reload()}
+        pneu={medicaoModal.pneu}
+      />
     </div>
   );
 }

@@ -139,7 +139,7 @@ CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "False") == "True"
 
 # Se CORS_ALLOW_ALL_ORIGINS for False, usar lista específica
 if not CORS_ALLOW_ALL_ORIGINS:
-    _cors_origins = os.getenv("CORS_ALLOWED_ORIGINS", "https://xbpneus-frontend.onrender.com,http://localhost:5173")
+    _cors_origins = os.getenv("CORS_ALLOWED_ORIGINS", "https://xbpneus-frontend.onrender.com,http://localhost:5173,http://localhost:3000")
     CORS_ALLOWED_ORIGINS = [x.strip() for x in _cors_origins.split(",") if x.strip()]
 
 CORS_ALLOW_HEADERS = [

@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+
+
 class Vehicle(models.Model):
     """Veículo da frota"""
     TIPO_CHOICES = [
@@ -17,6 +19,26 @@ class Vehicle(models.Model):
         ("INATIVO", "Inativo"),
         ("VENDIDO", "Vendido"),
     ]
+    
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='veiculos',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária do veículo"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='veiculos',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pelo veículo"
+    )
     
     placa = models.CharField(max_length=20, unique=True)
 

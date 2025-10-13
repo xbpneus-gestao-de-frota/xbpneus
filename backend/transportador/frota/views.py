@@ -8,13 +8,13 @@ from .models import Vehicle, Position
 from .serializers import VehicleSerializer, PositionSerializer
 
 class VehicleViewSet(AuditedModelViewSet):
-    queryset = Vehicle.objects.all().order_by("id")
+    queryset = Vehicle.objects.select_related('empresa', 'filial').all().order_by("id")
     serializer_class = VehicleSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['id']
-    ordering_fields = ['id']
+    search_fields = ['id', 'placa', 'modelo', 'marca', 'chassi']
+    ordering_fields = ['id', 'placa', 'modelo', 'km']
     permission_classes = [permissions.IsAuthenticated]
-    filterset_fields = ['placa','modelo','motorista']
+    filterset_fields = ['placa', 'modelo', 'motorista', 'empresa', 'filial', 'tipo', 'status']
 
     @action(detail=False, methods=["get"], url_path="export")
     def export(self, request):

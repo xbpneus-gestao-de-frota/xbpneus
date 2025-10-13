@@ -5,6 +5,10 @@ import re
 class VehicleSerializer(serializers.ModelSerializer):
     """Serializer para veículos com validações de negócio"""
     
+    empresa_nome = serializers.CharField(source='empresa.nome', read_only=True)
+    filial_nome = serializers.CharField(source='filial.nome', read_only=True)
+    filial_codigo = serializers.CharField(source='filial.codigo', read_only=True)
+    
     class Meta:
         model = Vehicle
         fields = "__all__"

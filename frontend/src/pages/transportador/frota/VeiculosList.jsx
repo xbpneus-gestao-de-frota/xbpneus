@@ -48,6 +48,8 @@ export default function ListPage(){
 
   const cols = [
     {"key": "id", "label": "ID"}, 
+    {"key": "empresa_nome", "label": "Empresa"},
+    {"key": "filial_codigo", "label": "Filial"},
     {"key": "placa", "label": "Placa"}, 
     {"key": "modelo", "label": "Modelo"}, 
     {"key": "marca", "label": "Marca"},

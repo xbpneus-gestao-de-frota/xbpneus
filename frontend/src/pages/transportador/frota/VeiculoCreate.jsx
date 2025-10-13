@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/http";
 import PageHeader from "../../../components/PageHeader";
@@ -8,8 +8,12 @@ export default function VeiculoCreate() {
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [empresas, setEmpresas] = useState([]);
+  const [filiais, setFiliais] = useState([]);
   
   const [form, setForm] = useState({
+    empresa: "",
+    filial: "",
     placa: "",
     modelo: "",
     marca: "",
@@ -30,6 +34,39 @@ export default function VeiculoCreate() {
     observacoes: ""
   });
 
+  // Carregar empresas ao montar o componente
+  useEffect(() => {
+    loadEmpresas();
+  }, []);
+
+  // Carregar filiais quando empresa for selecionada
+  useEffect(() => {
+    if (form.empresa) {
+      loadFiliais(form.empresa);
+    } else {
+      setFiliais([]);
+      setForm(prev => ({ ...prev, filial: "" }));
+    }
+  }, [form.empresa]);
+
+  const loadEmpresas = async () => {
+    try {
+      const response = await api.get("/api/transportador/empresas/empresas/");
+      setEmpresas(response.data.results || response.data || []);
+    } catch (error) {
+      console.error("Erro ao carregar empresas:", error);
+    }
+  };
+
+  const loadFiliais = async (empresaId) => {
+    try {
+      const response = await api.get(`/api/transportador/empresas/filiais/?empresa=${empresaId}`);
+      setFiliais(response.data.results || response.data || []);
+    } catch (error) {
+      console.error("Erro ao carregar filiais:", error);
+    }
+  };
+
   const onChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -42,6 +79,8 @@ export default function VeiculoCreate() {
     try {
       // Preparar payload convertendo strings vazias para null e números
       const payload = {
+        empresa: form.empresa ? parseInt(form.empresa) : null,
+        filial: form.filial ? parseInt(form.filial) : null,
         placa: form.placa,
         modelo: form.modelo || "",
         marca: form.marca || null,
@@ -87,6 +126,47 @@ export default function VeiculoCreate() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Empresa e Filial */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Empresa e Filial</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
+                <select
+                  name="empresa"
+                  value={form.empresa}
+                  onChange={onChange}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Selecione uma empresa</option>
+                  {empresas.map((emp) => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Filial</label>
+                <select
+                  name="filial"
+                  value={form.filial}
+                  onChange={onChange}
+                  disabled={!form.empresa}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                >
+                  <option value="">Selecione uma filial</option>
+                  {filiais.map((fil) => (
+                    <option key={fil.id} value={fil.id}>
+                      {fil.codigo} - {fil.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
           {/* Dados Básicos */}
           <div>
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Dados Básicos</h3>

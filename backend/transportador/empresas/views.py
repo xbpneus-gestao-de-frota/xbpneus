@@ -1,21 +1,112 @@
-from rest_framework import viewsets, permissions
-from .models import Empresa
-from .serializers import EmpresaSerializer
-
-class EmpresaViewSet(viewsets.ModelViewSet):
-    queryset = Empresa.objects.all().order_by("id")
-    serializer_class = EmpresaSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-
-from rest_framework.decorators import api_view, permission_classes as drf_permission_classes
+from rest_framework import viewsets, permissions, filters, status
+from rest_framework.decorators import action, api_view, permission_classes as drf_permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import status
 from django.contrib.auth.hashers import make_password
-from .models import Transportador
+from django_filters.rest_framework import DjangoFilterBackend
 
+from .models import Empresa, Filial, Transportador
+from .serializers import (
+    EmpresaSerializer,
+    EmpresaListSerializer,
+    FilialSerializer,
+    FilialListSerializer,
+)
+
+
+class EmpresaViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento de Empresas.
+    Fornece operações CRUD completas com filtros e buscas.
+    """
+    queryset = Empresa.objects.all().order_by('nome')
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['tipo', 'ativa', 'estado', 'cidade']
+    search_fields = ['nome', 'cnpj', 'razao_social', 'nome_fantasia', 'email']
+    ordering_fields = ['nome', 'tipo', 'criado_em']
+    
+    def get_serializer_class(self):
+        """Retorna serializer apropriado para a ação"""
+        if self.action == 'list':
+            return EmpresaListSerializer
+        return EmpresaSerializer
+    
+    @action(detail=True, methods=['get'])
+    def filiais(self, request, pk=None):
+        """Retorna todas as filiais de uma empresa"""
+        empresa = self.get_object()
+        filiais = empresa.filiais.all()
+        serializer = FilialListSerializer(filiais, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'])
+    def ativar(self, request, pk=None):
+        """Ativa uma empresa"""
+        empresa = self.get_object()
+        empresa.ativa = True
+        empresa.save()
+        return Response({'status': 'Empresa ativada com sucesso'})
+    
+    @action(detail=True, methods=['post'])
+    def desativar(self, request, pk=None):
+        """Desativa uma empresa"""
+        empresa = self.get_object()
+        empresa.ativa = False
+        empresa.save()
+        return Response({'status': 'Empresa desativada com sucesso'})
+
+
+class FilialViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento de Filiais.
+    Fornece operações CRUD completas com filtros e buscas.
+    """
+    queryset = Filial.objects.all().select_related('empresa').order_by('empresa', 'codigo')
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['empresa', 'ativa', 'matriz', 'estado', 'cidade']
+    search_fields = ['nome', 'codigo', 'cnpj', 'email']
+    ordering_fields = ['nome', 'codigo', 'criado_em']
+    
+    def get_serializer_class(self):
+        """Retorna serializer apropriado para a ação"""
+        if self.action == 'list':
+            return FilialListSerializer
+        return FilialSerializer
+    
+    @action(detail=True, methods=['post'])
+    def ativar(self, request, pk=None):
+        """Ativa uma filial"""
+        filial = self.get_object()
+        filial.ativa = True
+        filial.save()
+        return Response({'status': 'Filial ativada com sucesso'})
+    
+    @action(detail=True, methods=['post'])
+    def desativar(self, request, pk=None):
+        """Desativa uma filial"""
+        filial = self.get_object()
+        filial.ativa = False
+        filial.save()
+        return Response({'status': 'Filial desativada com sucesso'})
+    
+    @action(detail=True, methods=['post'])
+    def definir_matriz(self, request, pk=None):
+        """Define uma filial como matriz"""
+        filial = self.get_object()
+        
+        # Remove flag de matriz de outras filiais da mesma empresa
+        Filial.objects.filter(empresa=filial.empresa, matriz=True).update(matriz=False)
+        
+        # Define esta filial como matriz
+        filial.matriz = True
+        filial.save()
+        
+        return Response({'status': 'Filial definida como matriz com sucesso'})
+
+
+# Endpoint de registro de transportador (mantido da versão anterior)
 @api_view(['POST'])
 @drf_permission_classes([AllowAny])
 def register_transportador(request):

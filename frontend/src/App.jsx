@@ -51,6 +51,12 @@ import IAAnalise from "./pages/transportador/ia/Analise";
 import IAGamificacao from "./pages/transportador/ia/Gamificacao";
 import IAGarantias from "./pages/transportador/ia/Garantias";
 
+// Empresas e Filiais
+import EmpresasList from "./pages/transportador/empresas/EmpresasList";
+import EmpresaForm from "./pages/transportador/empresas/EmpresaForm";
+import FiliaisList from "./pages/transportador/empresas/FiliaisList";
+import FilialForm from "./pages/transportador/empresas/FilialForm";
+
 export default function App(){
   return (
     <Routes>
@@ -90,6 +96,14 @@ export default function App(){
         <Route path="ia/analise" element={<IAAnalise />} />
         <Route path="ia/gamificacao" element={<IAGamificacao />} />
         <Route path="ia/garantias" element={<IAGarantias />} />
+
+        {/* Empresas e Filiais */}
+        <Route path="empresas" element={<EmpresasList />} />
+        <Route path="empresas/new" element={<EmpresaForm />} />
+        <Route path="empresas/:id/edit" element={<EmpresaForm />} />
+        <Route path="filiais" element={<FiliaisList />} />
+        <Route path="filiais/new" element={<FilialForm />} />
+        <Route path="filiais/:id/edit" element={<FilialForm />} />
 
         <Route path="financeiro" element={<Financeiro />} />
         <Route path="compras" element={<Compras />} />

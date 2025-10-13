@@ -82,6 +82,7 @@ try_include("api/transportador/compliance/", "backend.transportador.compliance.u
 try_include("api/transportador/alertas/", "backend.transportador.alertas.urls")
 try_include("api/transportador/integracoes/", "backend.transportador.integracoes.urls")
 try_include("api/transportador/configuracoes/", "backend.transportador.configuracoes.urls")
+try_include("api/transportador/empresas/", "backend.transportador.empresas.urls")
 
 # IA - Novo Módulo
 try_include("api/transportador/ia/", "backend.transportador.ia_pneus.urls")

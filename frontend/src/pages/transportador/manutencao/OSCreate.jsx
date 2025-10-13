@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../../api/http';
+import api from '../../api/http';
 import PageHeader from '../../../components/PageHeader';
 import Loader from '../../../components/Loader';
 import ErrorState from '../../../components/ErrorState';

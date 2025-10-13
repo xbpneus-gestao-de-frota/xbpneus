@@ -91,3 +91,98 @@ class PermissaoCustomizadaViewSet(viewsets.ModelViewSet):
         serializer.save(criado_por=self.request.user)
 
 
+
+
+
+# =============================================================================
+# VIEWSETS PARA TABELAS AUXILIARES
+# =============================================================================
+
+from .models import (
+    CatalogoModeloVeiculo,
+    MapaPosicaoPneu,
+    OperacaoConfiguracao,
+    MedidaPorPosicao,
+    PressaoRecomendada,
+    CatalogoPneuXBRI
+)
+from .serializers import (
+    CatalogoModeloVeiculoSerializer,
+    MapaPosicaoPneuSerializer,
+    OperacaoConfiguracaoSerializer,
+    MedidaPorPosicaoSerializer,
+    PressaoRecomendadaSerializer,
+    CatalogoPneuXBRISerializer
+)
+
+
+class CatalogoModeloVeiculoViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet somente leitura para CatalogoModeloVeiculo"""
+    permission_classes = [IsAuthenticated]
+    queryset = CatalogoModeloVeiculo.objects.all()
+    serializer_class = CatalogoModeloVeiculoSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['categoria', 'marca']
+    search_fields = ['marca', 'familia_modelo', 'variante']
+    ordering_fields = ['marca', 'familia_modelo', 'ano_inicio']
+    ordering = ['marca', 'familia_modelo']
+
+
+class MapaPosicaoPneuViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet somente leitura para MapaPosicaoPneu"""
+    permission_classes = [IsAuthenticated]
+    queryset = MapaPosicaoPneu.objects.all()
+    serializer_class = MapaPosicaoPneuSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['config_id', 'componente', 'posicao_tipo']
+    search_fields = ['config_id', 'position_id']
+    ordering_fields = ['config_id', 'componente', 'eixo']
+    ordering = ['config_id', 'componente', 'eixo']
+
+
+class OperacaoConfiguracaoViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet somente leitura para OperacaoConfiguracao"""
+    permission_classes = [IsAuthenticated]
+    queryset = OperacaoConfiguracao.objects.all()
+    serializer_class = OperacaoConfiguracaoSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['op_code', 'implementos_recomendados']
+    ordering_fields = ['op_code']
+    ordering = ['op_code']
+
+
+class MedidaPorPosicaoViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet somente leitura para MedidaPorPosicao"""
+    permission_classes = [IsAuthenticated]
+    queryset = MedidaPorPosicao.objects.all()
+    serializer_class = MedidaPorPosicaoSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['config_id', 'posicao_tipo']
+    search_fields = ['config_id', 'medidas_tipicas']
+    ordering_fields = ['config_id', 'posicao_tipo']
+    ordering = ['config_id', 'posicao_tipo']
+
+
+class PressaoRecomendadaViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet somente leitura para PressaoRecomendada"""
+    permission_classes = [IsAuthenticated]
+    queryset = PressaoRecomendada.objects.all()
+    serializer_class = PressaoRecomendadaSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['categoria', 'config_id', 'posicao_tipo']
+    search_fields = ['medida_exemplo']
+    ordering_fields = ['categoria', 'config_id']
+    ordering = ['categoria', 'config_id']
+
+
+class CatalogoPneuXBRIViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet somente leitura para CatalogoPneuXBRI"""
+    permission_classes = [IsAuthenticated]
+    queryset = CatalogoPneuXBRI.objects.all()
+    serializer_class = CatalogoPneuXBRISerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['linha', 'modelo', 'medida']
+    search_fields = ['linha', 'modelo', 'medida', 'linha_canonica']
+    ordering_fields = ['linha', 'modelo', 'medida']
+    ordering = ['linha', 'modelo', 'medida']
+

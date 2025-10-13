@@ -17,6 +17,24 @@ class Tire(models.Model):
         ("REFORMADO", "Reformado"),
     ]
     
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='pneus',
+        help_text="Empresa (Matriz) proprietária do pneu",
+        null=True,
+        blank=True
+    )
+    filial_estoque = models.ForeignKey(
+        'empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='pneus_estoque',
+        help_text="Filial onde o pneu está em estoque",
+        null=True,
+        blank=True
+    )
+    
     codigo = models.CharField(max_length=100, unique=True)
 
     numero_fogo = models.CharField(max_length=50, blank=True, null=True, help_text='Número de fogo gravado no pneu')

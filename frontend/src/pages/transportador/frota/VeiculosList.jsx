@@ -12,7 +12,7 @@ import PageHeader from "../../../components/PageHeader";
 import api from "../../../api/http";
 
 const CANDIDATES = ["/api/transportador/frota/veiculos/", "/api/frota/veiculos/", "/api/veiculos/"];
-const MOCK = ()=>[{ id:1, placa:'ABC1D23', modelo:'Cavalo Mecânico', km:458200, motorista:'João Silva' }];
+const MOCK = ()=>[{ id:1, placa:\'ABC1D23\', modelo:\'Cavalo Mecânico\', km:458200, motorista:\'João Silva\' }];
 
 export default function ListPage(){
   const navigate = useNavigate();
@@ -21,14 +21,24 @@ export default function ListPage(){
   const [deleting, setDeleting] = useState(null);
 
   const [placa, setPlaca] = useState("");
-  const [modelo, setModelo] = useState("");
+  const [empresa, setEmpresa] = useState("");
+  const [filial, setFilial] = useState("");
+  const [modeloVeiculoMarca, setModeloVeiculoMarca] = useState("");
+  const [modeloVeiculoFamilia, setModeloVeiculoFamilia] = useState("");
+  const [configuracaoOperacional, setConfiguracaoOperacional] = useState("");
   const [motorista, setMotorista] = useState("");
+
   const params = {};
   if (q) params.search = q;
   if (ordering) params.ordering = ordering;
   if (placa) params.placa = placa;
-  if (modelo) params.modelo = modelo;
+  if (empresa) params.empresa = empresa;
+  if (filial) params.filial = filial;
+  if (modeloVeiculoMarca) params.modelo_veiculo__marca = modeloVeiculoMarca;
+  if (modeloVeiculoFamilia) params.modelo_veiculo__familia_modelo = modeloVeiculoFamilia;
+  if (configuracaoOperacional) params.configuracao_operacional__op_code = configuracaoOperacional;
   if (motorista) params.motorista = motorista;
+
   const { data, error, loading, simulated, usedEndpoint, meta, page, setPage } = useTryFetch(CANDIDATES, { mock: MOCK, params, paginated: true, initialPage: 1, pageSize: 20 });
 
   const handleDelete = async (id, placa) => {
@@ -51,8 +61,9 @@ export default function ListPage(){
     {"key": "empresa_nome", "label": "Empresa"},
     {"key": "filial_codigo", "label": "Filial"},
     {"key": "placa", "label": "Placa"}, 
-    {"key": "modelo", "label": "Modelo"}, 
-    {"key": "marca", "label": "Marca"},
+    {"key": "modelo_veiculo_marca", "label": "Marca"},
+    {"key": "modelo_veiculo_nome", "label": "Modelo"},
+    {"key": "configuracao_operacional_op_code", "label": "Operação"},
     {"key": "tipo", "label": "Tipo"},
     {"key": "status", "label": "Status"},
     {"key": "km", "label": "KM"}, 
@@ -86,7 +97,7 @@ export default function ListPage(){
     }
   ];
   const [selectedCols, setSelectedCols] = useState(cols.map(c=>c.label));
-  useEffect(()=>{ try{ const saved = localStorage.getItem('cols:'+window.location.pathname); if(saved){ setSelectedCols(JSON.parse(saved)); } }catch{} }, []);
+  useEffect(()=>{ try{ const saved = localStorage.getItem(\'cols:\'+window.location.pathname); if(saved){ setSelectedCols(JSON.parse(saved)); } }catch{} }, []);
   const visibleCols = cols.filter(c => selectedCols.includes(c.label));
 
 
@@ -141,11 +152,15 @@ export default function ListPage(){
             <option value="-km">Ordem: KM ↓</option>
             <option value="id">Ordem: ID ↑</option>
             <option value="-id">Ordem: ID ↓</option>
+            <option value="modelo_veiculo__marca">Ordem: Marca ↑</option>
+            <option value="-modelo_veiculo__marca">Ordem: Marca ↓</option>
+            <option value="modelo_veiculo__familia_modelo">Ordem: Modelo ↑</option>
+            <option value="-modelo_veiculo__familia_modelo">Ordem: Modelo ↓</option>
           </select>
           
           {/* Itens por página */}
           <select 
-            onChange={e=>setPageSize(parseInt(e.target.value,10))} 
+            onChange={e=>setPage(1) || setPageSize(parseInt(e.target.value,10))} 
             className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="20">20/página</option>
@@ -154,10 +169,11 @@ export default function ListPage(){
           </select>
           
           {/* Botão de exportação */}
-          <ExportButton 
-            columns={cols.filter(c=>!c.linkTo)} 
-            rows={data || []} 
-            filename="veiculos.csv" 
+          <ServerExportButtons 
+            endpoint={usedEndpoint} 
+            params={params} 
+            filename="veiculos" 
+            columns={cols.filter(c=>!c.render).map(c=>c.key)}
           />
         </div>
         
@@ -170,9 +186,33 @@ export default function ListPage(){
             className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input 
-            value={modelo} 
-            onChange={e=>setModelo(e.target.value)} 
+            value={empresa} 
+            onChange={e=>setEmpresa(e.target.value)} 
+            placeholder="Filtrar por empresa ID" 
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input 
+            value={filial} 
+            onChange={e=>setFilial(e.target.value)} 
+            placeholder="Filtrar por filial ID" 
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input 
+            value={modeloVeiculoMarca} 
+            onChange={e=>setModeloVeiculoMarca(e.target.value)} 
+            placeholder="Filtrar por marca" 
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input 
+            value={modeloVeiculoFamilia} 
+            onChange={e=>setModeloVeiculoFamilia(e.target.value)} 
             placeholder="Filtrar por modelo" 
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input 
+            value={configuracaoOperacional} 
+            onChange={e=>setConfiguracaoOperacional(e.target.value)} 
+            placeholder="Filtrar por operação" 
             className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input 
@@ -187,7 +227,7 @@ export default function ListPage(){
       {/* Estados de carregamento/erro */}
       {loading && <Loader />}
       {error && <ErrorState message="Falha ao carregar veículos." />}
-      {!loading && !error && (!data || data.length === 0) && <EmptyState />}
+      {!loading && !error && data && data.length === 0 && <EmptyState />}
       
       {/* Tabela de dados */}
       {!loading && !error && data && data.length > 0 && (
@@ -224,3 +264,4 @@ export default function ListPage(){
     </div>
   );
 }
+

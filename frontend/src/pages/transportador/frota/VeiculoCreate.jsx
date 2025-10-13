@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/http";
 import PageHeader from "../../../components/PageHeader";
@@ -10,13 +10,15 @@ export default function VeiculoCreate() {
   const [error, setError] = useState("");
   const [empresas, setEmpresas] = useState([]);
   const [filiais, setFiliais] = useState([]);
+  const [modelosVeiculos, setModelosVeiculos] = useState([]);
+  const [operacoesConfiguracoes, setOperacoesConfiguracoes] = useState([]);
   
   const [form, setForm] = useState({
     empresa: "",
     filial: "",
     placa: "",
-    modelo: "",
-    marca: "",
+    modelo_veiculo: "",
+    configuracao_operacional: "",
     ano_fabricacao: "",
     ano_modelo: "",
     tipo: "CAMINHAO",
@@ -28,16 +30,29 @@ export default function VeiculoCreate() {
     chassi: "",
     renavam: "",
     capacidade_carga: "",
-    numero_eixos: "3",
-    total_posicoes_pneus: "6",
     data_aquisicao: "",
     observacoes: ""
   });
 
-  // Carregar empresas ao montar o componente
-  useEffect(() => {
-    loadEmpresas();
+  // Carregar dados dos catálogos
+  const loadCatalogos = useCallback(async () => {
+    try {
+      const [empresasRes, modelosRes, operacoesRes] = await Promise.all([
+        api.get("/api/transportador/empresas/empresas/"),
+        api.get("/api/transportador/configuracoes/catalogo-modelos-veiculos/"),
+        api.get("/api/transportador/configuracoes/operacoes-configuracoes/")
+      ]);
+      setEmpresas(empresasRes.data.results || empresasRes.data || []);
+      setModelosVeiculos(modelosRes.data.results || modelosRes.data || []);
+      setOperacoesConfiguracoes(operacoesRes.data.results || operacoesRes.data || []);
+    } catch (error) {
+      console.error("Erro ao carregar catálogos:", error);
+    }
   }, []);
+
+  useEffect(() => {
+    loadCatalogos();
+  }, [loadCatalogos]);
 
   // Carregar filiais quando empresa for selecionada
   useEffect(() => {
@@ -48,15 +63,6 @@ export default function VeiculoCreate() {
       setForm(prev => ({ ...prev, filial: "" }));
     }
   }, [form.empresa]);
-
-  const loadEmpresas = async () => {
-    try {
-      const response = await api.get("/api/transportador/empresas/empresas/");
-      setEmpresas(response.data.results || response.data || []);
-    } catch (error) {
-      console.error("Erro ao carregar empresas:", error);
-    }
-  };
 
   const loadFiliais = async (empresaId) => {
     try {
@@ -77,13 +83,12 @@ export default function VeiculoCreate() {
     setError("");
 
     try {
-      // Preparar payload convertendo strings vazias para null e números
       const payload = {
         empresa: form.empresa ? parseInt(form.empresa) : null,
         filial: form.filial ? parseInt(form.filial) : null,
         placa: form.placa,
-        modelo: form.modelo || "",
-        marca: form.marca || null,
+        modelo_veiculo: form.modelo_veiculo ? parseInt(form.modelo_veiculo) : null,
+        configuracao_operacional: form.configuracao_operacional ? parseInt(form.configuracao_operacional) : null,
         ano_fabricacao: form.ano_fabricacao ? parseInt(form.ano_fabricacao) : null,
         ano_modelo: form.ano_modelo ? parseInt(form.ano_modelo) : null,
         tipo: form.tipo,
@@ -95,8 +100,6 @@ export default function VeiculoCreate() {
         chassi: form.chassi || null,
         renavam: form.renavam || null,
         capacidade_carga: form.capacidade_carga ? parseFloat(form.capacidade_carga) : null,
-        numero_eixos: parseInt(form.numero_eixos) || 3,
-        total_posicoes_pneus: parseInt(form.total_posicoes_pneus) || 6,
         data_aquisicao: form.data_aquisicao || null,
         observacoes: form.observacoes || null
       };
@@ -187,27 +190,37 @@ export default function VeiculoCreate() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Marca</label>
-                <input
-                  type="text"
-                  name="marca"
-                  value={form.marca}
+                <label className="block text-sm font-medium text-gray-700 mb-1">Modelo do Veículo</label>
+                <select
+                  name="modelo_veiculo"
+                  value={form.modelo_veiculo}
                   onChange={onChange}
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Scania, Volvo, Mercedes..."
-                />
+                >
+                  <option value="">Selecione um modelo</option>
+                  {modelosVeiculos.map((modelo) => (
+                    <option key={modelo.id} value={modelo.id}>
+                      {modelo.marca} {modelo.familia_modelo} {modelo.variante}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Modelo</label>
-                <input
-                  type="text"
-                  name="modelo"
-                  value={form.modelo}
+                <label className="block text-sm font-medium text-gray-700 mb-1">Configuração Operacional</label>
+                <select
+                  name="configuracao_operacional"
+                  value={form.configuracao_operacional}
                   onChange={onChange}
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="R 450, FH 540..."
-                />
+                >
+                  <option value="">Selecione uma configuração</option>
+                  {operacoesConfiguracoes.map((op) => (
+                    <option key={op.id} value={op.id}>
+                      {op.op_code}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -321,34 +334,6 @@ export default function VeiculoCreate() {
                   placeholder="25.00"
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Número de Eixos
-                </label>
-                <input
-                  type="number"
-                  name="numero_eixos"
-                  value={form.numero_eixos}
-                  onChange={onChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="3"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Total de Posições de Pneus
-                </label>
-                <input
-                  type="number"
-                  name="total_posicoes_pneus"
-                  value={form.total_posicoes_pneus}
-                  onChange={onChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="6"
-                />
-              </div>
             </div>
           </div>
 
@@ -423,27 +408,26 @@ export default function VeiculoCreate() {
               onChange={onChange}
               rows="3"
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Informações adicionais sobre o veículo..."
-            />
+              placeholder="Detalhes adicionais sobre o veículo"
+            ></textarea>
           </div>
 
-          {/* Botões */}
-          <div className="flex items-center gap-3 pt-4 border-t">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? "Salvando..." : "Salvar Veículo"}
-            </button>
-            
-            <button
-              type="button"
+          <div className="flex justify-end space-x-4">
+            <Button 
+              type="button" 
+              variant="secondary"
               onClick={() => navigate("/dashboard/frota/veiculos")}
-              className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              disabled={saving}
             >
               Cancelar
-            </button>
+            </Button>
+            <Button 
+              type="submit" 
+              variant="primary"
+              disabled={saving}
+            >
+              {saving ? "Salvando..." : "Salvar Veículo"}
+            </Button>
           </div>
         </form>
       </div>

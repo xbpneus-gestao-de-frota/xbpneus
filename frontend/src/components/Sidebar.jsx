@@ -10,7 +10,9 @@ import {
   ShoppingCart, 
   Calendar, 
   FileText, 
-  Settings 
+  Settings,
+  Building2,
+  MapPin
 } from 'lucide-react';
 
 const items = [
@@ -25,6 +27,8 @@ const items = [
   { to: "/dashboard/eventos", label: "Eventos", icon: Calendar },
   { to: "/dashboard/relatorios", label: "Relatórios", icon: FileText },
   { to: "/dashboard/configuracoes", label: "Configurações", icon: Settings },
+  { to: "/dashboard/empresas", label: "Empresas", icon: Building2 },
+  { to: "/dashboard/filiais", label: "Filiais", icon: MapPin },
 ];
 
 export default function Sidebar() {

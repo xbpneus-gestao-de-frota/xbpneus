@@ -51,6 +51,11 @@ import IAAnalise from "./pages/transportador/ia/Analise";
 import IAGamificacao from "./pages/transportador/ia/Gamificacao";
 import IAGarantias from "./pages/transportador/ia/Garantias";
 
+import EmpresasList from "./pages/transportador/empresas/EmpresasList";
+import EmpresaForm from "./pages/transportador/empresas/EmpresaForm";
+import FiliaisList from "./pages/transportador/filiais/FiliaisList";
+import FilialForm from "./pages/transportador/filiais/FilialForm";
+
 export default function App(){
   return (
     <Routes>
@@ -97,6 +102,14 @@ export default function App(){
         <Route path="relatorios" element={<Relatorios />} />
         <Route path="configuracoes" element={<Configuracoes />} />
         <Route path="minha-empresa" element={<MinhaEmpresa />} />
+
+        {/* Empresas e Filiais */}
+        <Route path="empresas" element={<EmpresasList />} />
+        <Route path="empresas/create" element={<EmpresaForm />} />
+        <Route path="empresas/:id/edit" element={<EmpresaForm />} />
+        <Route path="filiais" element={<FiliaisList />} />
+        <Route path="filiais/create" element={<FilialForm />} />
+        <Route path="filiais/:id/edit" element={<FilialForm />} />
       </Route>
 
       {/* Rota para Motorista */}

@@ -18,24 +18,6 @@ class Vehicle(models.Model):
         ("VENDIDO", "Vendido"),
     ]
     
-    # Arquitetura Matriz-Filiais
-    empresa = models.ForeignKey(
-        'empresas.Empresa',
-        on_delete=models.PROTECT,
-        related_name='veiculos',
-        help_text="Empresa (Matriz) proprietária do veículo",
-        null=True,
-        blank=True
-    )
-    filial = models.ForeignKey(
-        'empresas.Filial',
-        on_delete=models.PROTECT,
-        related_name='veiculos',
-        help_text="Filial onde o veículo está alocado",
-        null=True,
-        blank=True
-    )
-    
     placa = models.CharField(max_length=20, unique=True)
 
     modelo = models.CharField(max_length=100, blank=True)

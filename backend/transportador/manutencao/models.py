@@ -75,24 +75,11 @@ class OrdemServico(models.Model):
     """Ordem de Serviço Completa"""
     
     # Relacionamentos
-    # Arquitetura Matriz-Filiais
-    empresa = models.ForeignKey(
-        'empresas.Empresa',
-        on_delete=models.PROTECT,
-        related_name='ordens_servico',
-        verbose_name='Empresa',
-        null=True,
-        blank=True
-    )
-    filial_executante = models.ForeignKey(
-        'empresas.Filial',
-        on_delete=models.PROTECT,
-        related_name='ordens_servico_executadas',
-        verbose_name='Filial Executante',
-        help_text="Filial que executará/executou a OS",
-        null=True,
-        blank=True
-    )
+    # empresa = models.ForeignKey(
+    #     on_delete=models.CASCADE,
+    #     related_name='ordens_servico',
+    #     verbose_name='Empresa'
+    # )
     veiculo = models.ForeignKey(
         'frota.Vehicle',
         on_delete=models.CASCADE,

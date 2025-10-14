@@ -13,6 +13,24 @@ class TipoCarga(models.Model):
     """Model TipoCarga"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='tipos_carga',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o tipo de carga pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='tipos_carga',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o tipo de carga está associado"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='cargas_tipocarga',
@@ -48,6 +66,24 @@ class Carga(models.Model):
     """Model Carga"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='cargas',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual a carga pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='cargas',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual a carga está associada"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='cargas_carga',
@@ -83,6 +119,24 @@ class ItemCarga(models.Model):
     """Model ItemCarga"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='itens_carga',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o item de carga pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='itens_carga',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o item de carga está associado"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='cargas_itemcarga',
@@ -118,6 +172,24 @@ class ManifestoCarga(models.Model):
     """Model ManifestoCarga"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='manifestos_carga',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o manifesto de carga pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='manifestos_carga',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o manifesto de carga está associado"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='cargas_manifestocarga',
@@ -153,6 +225,24 @@ class RastreamentoCarga(models.Model):
     """Model RastreamentoCarga"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='rastreamentos_carga',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o rastreamento de carga pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='rastreamentos_carga',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o rastreamento de carga está associado"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='cargas_rastreamentocarga',

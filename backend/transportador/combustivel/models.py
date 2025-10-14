@@ -5,8 +5,24 @@ from backend.transportador.frota.models import Vehicle
 
 class PostoCombustivel(models.Model):
     """Postos de combustível cadastrados"""
-    # empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='postos_combustivel')
-    
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='postos_combustivel',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o posto de combustível pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='postos_combustivel',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o posto de combustível está associado"
+    )
     nome = models.CharField(max_length=200)
     cnpj = models.CharField(max_length=18, blank=True, null=True)
     endereco = models.TextField(blank=True, null=True)
@@ -48,7 +64,24 @@ class Abastecimento(models.Model):
         ('FATURADO', 'Faturado'),
     ]
     
-    # empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='abastecimentos')
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='abastecimentos',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o abastecimento pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='abastecimentos',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o abastecimento está associado"
+    )
     veiculo = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='abastecimentos')
     posto = models.ForeignKey(PostoCombustivel, on_delete=models.SET_NULL, null=True, blank=True, related_name='abastecimentos')
     data_abastecimento = models.DateTimeField(default=timezone.now)
@@ -114,6 +147,24 @@ class Abastecimento(models.Model):
 
 
 class ConsumoMensal(models.Model):
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='consumos_mensais',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o consumo mensal pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='consumos_mensais',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o consumo mensal está associado"
+    )
     """Análise de consumo mensal por veículo"""
     veiculo = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='consumo_mensal')
     

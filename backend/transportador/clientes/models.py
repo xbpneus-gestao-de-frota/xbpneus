@@ -2,6 +2,24 @@ from django.db import models
 from django.utils import timezone
 
 class Cliente(models.Model):
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='clientes',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o cliente pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='clientes',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o cliente está associado"
+    )
     """Clientes da transportadora"""
     TIPO_CHOICES = [
         ("PF", "Pessoa Física"),
@@ -59,6 +77,24 @@ class Cliente(models.Model):
 
 
 class ContatoCliente(models.Model):
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='contatos_cliente',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o contato do cliente pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='contatos_cliente',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o contato do cliente está associado"
+    )
     """Contatos do cliente"""
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='contatos')
     

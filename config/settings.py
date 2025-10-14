@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     
     # IA - Novo Módulo
     "backend.transportador.ia_pneus",
+    "backend.transportador.motorista_externo",
     
     # Outros Módulos
     "backend.borracharia",

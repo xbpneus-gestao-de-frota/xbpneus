@@ -75,6 +75,24 @@ class OrdemServico(models.Model):
     """Ordem de Serviço Completa"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='ordens_servico',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual a OS pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='ordens_servico',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual a OS está associada"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='ordens_servico',
@@ -201,6 +219,24 @@ class OrdemServico(models.Model):
 
 
 class ItemOS(models.Model):
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='itens_os',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o item da OS pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='itens_os',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o item da OS está associado"
+    )
     """Itens (peças/serviços) da Ordem de Serviço"""
     
     os = models.ForeignKey(
@@ -263,6 +299,24 @@ class ItemOS(models.Model):
 
 
 class ChecklistManutencao(models.Model):
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='checklists_manutencao',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o checklist pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='checklists_manutencao',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o checklist está associado"
+    )
     """Checklist de Manutenção"""
     
     os = models.ForeignKey(

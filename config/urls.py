@@ -1,5 +1,5 @@
 from django.contrib import admin
-from config import temp_user_creation_views, temp_migrate_views
+from config import temp_user_creation_views, temp_migrate_views, temp_approval_views
 from django.http import JsonResponse, HttpResponse
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -30,6 +30,7 @@ urlpatterns = [
     
     # Registro de usuários
     path("api/users/register_full/", register_full_view, name="users-register-full"),
+    path("api/approve-motorista-externo/<int:user_id>/", temp_approval_views.approve_motorista_externo, name="approve-motorista-externo"),
 ]
 
 def try_include(prefix: str, module_path: str):
@@ -86,6 +87,7 @@ try_include("api/transportador/empresas/", "backend.transportador.empresas.urls"
 
 # IA - Novo Módulo
 try_include("api/transportador/ia/", "backend.transportador.ia_pneus.urls")
+try_include("api/transportador/motorista-externo/", "backend.transportador.motorista_externo.urls")
 
 # Outros
 try_include("api/reports/", "backend.reports.urls")

@@ -10,7 +10,9 @@ class UsuarioTransportadorManager(BaseUserManager):
         if not email:
             raise ValueError("Email é obrigatório")
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        # Remove cnpj from extra_fields if it's not meant for UsuarioTransportador directly
+        cnpj = extra_fields.pop("cnpj", None)
+        user = self.model(email=email, cnpj=cnpj, **extra_fields)
         user.set_password(password)
         user.is_active = True  # Ativa o usuário por padrão
         user.aprovado = False  # Define como não aprovado por padrão, aguardando aprovação do admin
@@ -30,7 +32,7 @@ class UsuarioTransportador(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField("E-mail", unique=True)
     nome_razao_social = models.CharField("Nome/Razão Social", max_length=200)
-    cnpj = models.CharField("CNPJ", max_length=18, unique=True)
+    cnpj = models.CharField("CNPJ", max_length=18, unique=False, null=True, blank=True)
     telefone = models.CharField("Telefone", max_length=20)
     
     # Relacionamento com Empresa

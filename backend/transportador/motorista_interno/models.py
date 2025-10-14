@@ -21,7 +21,24 @@ class MotoristaInterno(models.Model):
         ('TEMPORARIO', 'Temporário'),
     ]
     
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='motoristas_internos')
+    empresa = models.ForeignKey(
+        Empresa,
+        on_delete=models.PROTECT,
+        related_name='motoristas_internos_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o motorista interno está vinculado"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='motoristas_internos_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o motorista interno está associado"
+    )
     
     # Dados pessoais
     nome_completo = models.CharField(max_length=200)
@@ -78,6 +95,24 @@ class VinculoMotoristaVeiculo(models.Model):
         ('INATIVO', 'Inativo'),
     ]
     
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='vinculos_motorista_veiculo_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o vínculo pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='vinculos_motorista_veiculo_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o vínculo está associado"
+    )
     motorista = models.ForeignKey(MotoristaInterno, on_delete=models.CASCADE, related_name='vinculos_veiculo')
     veiculo = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='vinculos_motorista')
     
@@ -110,10 +145,26 @@ class RegistroJornada(models.Model):
         ('MANUAL', 'Manual'),
         ('SISTEMA', 'Sistema'),
     ]
-    
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='registros_jornada_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o registro de jornada pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='registros_jornada_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o registro de jornada está associado"
+    )
     motorista = models.ForeignKey(MotoristaInterno, on_delete=models.CASCADE, related_name='registros_jornada')
     veiculo = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name='registros_jornada')
-    
     tipo_registro = models.CharField(max_length=20, choices=TIPO_REGISTRO_CHOICES)
     data_hora = models.DateTimeField(default=timezone.now)
     origem = models.CharField(max_length=20, choices=ORIGEM_CHOICES, default='APP')
@@ -157,6 +208,24 @@ class MensagemMotorista(models.Model):
         ('ERRO', 'Erro'),
     ]
     
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='mensagens_motorista_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual a mensagem pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='mensagens_motorista_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual a mensagem está associada"
+    )
     motorista = models.ForeignKey(MotoristaInterno, on_delete=models.CASCADE, related_name='mensagens')
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDENTE')
@@ -210,7 +279,24 @@ class AlertaMotorista(models.Model):
         ('RESOLVIDO', 'Resolvido'),
         ('IGNORADO', 'Ignorado'),
     ]
-    
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='alertas_motorista_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o alerta pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='alertas_motorista_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o alerta está associado"
+    )
     motorista = models.ForeignKey(MotoristaInterno, on_delete=models.CASCADE, related_name='alertas')
     tipo = models.CharField(max_length=30, choices=TIPO_CHOICES)
     prioridade = models.CharField(max_length=20, choices=PRIORIDADE_CHOICES, default='MEDIA')

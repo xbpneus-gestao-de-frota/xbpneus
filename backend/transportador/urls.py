@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from .dashboard_views import dashboard_view, profile_view, me_view
 
@@ -11,6 +11,7 @@ urlpatterns = [
     # Novos endpoints
     path('dashboard/', dashboard_view, name='transportador-dashboard'),
     path('profile/', profile_view, name='transportador-profile'),
-    path('me/', me_view, name='transportador-me'),
+    path("me/", me_view, name="transportador-me"),
+    path("motorista-externo/", include("backend.transportador.motorista_externo.urls")),
 ]
 

@@ -42,13 +42,24 @@ class LogAuditoria(models.Model):
         related_name='logs_auditoria',
         verbose_name='Usuário'
     )
-    # empresa = models.ForeignKey(
-    #     on_delete=models.CASCADE,
-    #     related_name='logs_auditoria',
-    #     verbose_name='Empresa',
-    #     null=True,
-    #     blank=True
-    # )
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='logs_auditoria_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o log de auditoria pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='logs_auditoria_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o log de auditoria está associado"
+    )
     
     # Ação
     acao = models.CharField(
@@ -197,13 +208,24 @@ class LogAlteracao(models.Model):
         related_name='logs_alteracao',
         verbose_name='Usuário'
     )
-    # empresa = models.ForeignKey(
-    #     on_delete=models.CASCADE,
-    #     related_name='logs_alteracao',
-    #     verbose_name='Empresa',
-    #     null=True,
-    #     blank=True
-    # )
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='logs_alteracao_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o log de alteração pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='logs_alteracao_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o log de alteração está associado"
+    )
     
     # Objeto alterado
     content_type = models.ForeignKey(
@@ -313,11 +335,24 @@ class ConfiguracaoAuditoria(models.Model):
     """Configurações de auditoria por empresa"""
     
     # Empresa
-    # empresa = models.OneToOneField(
-    #     on_delete=models.CASCADE,
-    #     related_name='configuracao_auditoria',
-    #     verbose_name='Empresa'
-    # )
+    empresa = models.OneToOneField(
+        'transportador_empresas.Empresa',
+        on_delete=models.CASCADE,
+        related_name='configuracao_auditoria',
+        verbose_name='Empresa',
+        null=True,
+        blank=True,
+        help_text="Empresa à qual a configuração de auditoria pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='configuracoes_auditoria_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual a configuração de auditoria está associada"
+    )
     
     # Configurações de log
     registrar_visualizacoes = models.BooleanField('Registrar Visualizações', default=False)

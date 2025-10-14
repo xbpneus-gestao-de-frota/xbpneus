@@ -21,6 +21,24 @@ class Almoxarifado(models.Model):
     """Almoxarifado"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='almoxarifados',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o almoxarifado pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='almoxarifados',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o almoxarifado está associado"
+    )
     # empresa = models.ForeignKey(
     #     on_delete=models.CASCADE,
     #     related_name='almoxarifados',
@@ -73,6 +91,24 @@ class LocalEstoque(models.Model):
     """Local de Estoque dentro do Almoxarifado"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='locais_estoque',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o local de estoque pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='locais_estoque',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o local de estoque está associado"
+    )
     almoxarifado = models.ForeignKey(
         Almoxarifado,
         on_delete=models.CASCADE,
@@ -130,6 +166,24 @@ class MovimentacaoAlmoxarifado(models.Model):
     """Movimentação de Almoxarifado"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='movimentacoes_almoxarifado_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual a movimentação pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='movimentacoes_almoxarifado_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual a movimentação está associada"
+    )
     almoxarifado = models.ForeignKey(
         Almoxarifado,
         on_delete=models.CASCADE,
@@ -225,6 +279,24 @@ class InventarioAlmoxarifado(models.Model):
     """Inventário de Almoxarifado"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='inventarios_almoxarifado_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o inventário pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='inventarios_almoxarifado_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o inventário está associado"
+    )
     almoxarifado = models.ForeignKey(
         Almoxarifado,
         on_delete=models.CASCADE,
@@ -279,6 +351,24 @@ class ItemInventario(models.Model):
     """Item do Inventário"""
     
     # Relacionamentos
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='itens_inventario_empresa',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa à qual o item de inventário pertence"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='itens_inventario_filial',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial à qual o item de inventário está associado"
+    )
     inventario = models.ForeignKey(
         InventarioAlmoxarifado,
         on_delete=models.CASCADE,

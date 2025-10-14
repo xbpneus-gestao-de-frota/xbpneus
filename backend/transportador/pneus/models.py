@@ -1,6 +1,26 @@
 from django.db import models
 from django.utils import timezone
 class Tire(models.Model):
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='pneus',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária do pneu"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='pneus',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pelo pneu"
+    )
+
     """Pneu do sistema"""
     STATUS_CHOICES = [
         ("ESTOQUE", "Em Estoque"),
@@ -82,6 +102,26 @@ class Tire(models.Model):
 
 
 class Application(models.Model):
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='aplicacoes_pneu',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária da aplicação de pneu"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='aplicacoes_pneu',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pela aplicação de pneu"
+    )
+
     """Aplicação de pneus - Regras de uso por medida"""
     medida = models.CharField(max_length=50, unique=True)
     
@@ -109,6 +149,26 @@ class Application(models.Model):
 
 
 class MovimentacaoPneu(models.Model):
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='movimentacoes_pneu',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária da movimentação de pneu"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='movimentacoes_pneu',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pela movimentação de pneu"
+    )
+
     """Histórico de movimentações do pneu"""
     TIPO_CHOICES = [
         ('MONTAGEM', 'Montagem'),
@@ -148,6 +208,26 @@ class MovimentacaoPneu(models.Model):
 
 
 class MedicaoPneu(models.Model):
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='medicoes_pneu',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária da medição de pneu"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='medicoes_pneu',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pela medição de pneu"
+    )
+
     """Medições de sulco e pressão do pneu"""
     pneu = models.ForeignKey(Tire, on_delete=models.CASCADE, related_name='medicoes')
     

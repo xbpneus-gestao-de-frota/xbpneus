@@ -113,6 +113,26 @@ class Vehicle(models.Model):
 
 
 class Position(models.Model):
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='posicoes',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária da posição de pneu"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='posicoes',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pela posição de pneu"
+    )
+
     """Posição de pneu em um veículo"""
     
     veiculo = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='posicoes_pneu')
@@ -155,6 +175,26 @@ class Position(models.Model):
 
 
 class HistoricoKm(models.Model):
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='historicos_km',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária do histórico de KM"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='historicos_km',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pelo histórico de KM"
+    )
+
     """Histórico de quilometragem do veículo"""
     veiculo = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='historico_km')
     

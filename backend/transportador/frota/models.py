@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+
+
 class Vehicle(models.Model):
     """Veículo da frota"""
     TIPO_CHOICES = [
@@ -18,10 +20,38 @@ class Vehicle(models.Model):
         ("VENDIDO", "Vendido"),
     ]
     
+    # Arquitetura Matriz-Filiais
+    empresa = models.ForeignKey(
+        'transportador_empresas.Empresa',
+        on_delete=models.PROTECT,
+        related_name='veiculos',
+        verbose_name="Empresa",
+        null=True,
+        blank=True,
+        help_text="Empresa proprietária do veículo"
+    )
+    filial = models.ForeignKey(
+        'transportador_empresas.Filial',
+        on_delete=models.PROTECT,
+        related_name='veiculos',
+        verbose_name="Filial",
+        null=True,
+        blank=True,
+        help_text="Filial responsável pelo veículo"
+    )
+    
     placa = models.CharField(max_length=20, unique=True)
 
-    modelo = models.CharField(max_length=100, blank=True)
-    marca = models.CharField(max_length=50, blank=True, null=True)
+    modelo_veiculo = models.ForeignKey(
+        'configuracoes.CatalogoModeloVeiculo',
+        on_delete=models.PROTECT,
+        related_name='veiculos_por_modelo',
+        verbose_name="Modelo de Veículo",
+        null=True,
+        blank=True,
+        help_text="Modelo de veículo do catálogo"
+    )
+    
     ano_fabricacao = models.IntegerField(blank=True, null=True)
     ano_modelo = models.IntegerField(blank=True, null=True)
     
@@ -42,8 +72,15 @@ class Vehicle(models.Model):
     capacidade_carga = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, help_text='Capacidade em toneladas')
     
     # Eixos e pneus
-    numero_eixos = models.IntegerField(default=3)
-    total_posicoes_pneus = models.IntegerField(default=6, help_text='Total de posições para pneus')
+    configuracao_operacional = models.ForeignKey(
+        'configuracoes.OperacaoConfiguracao',
+        on_delete=models.PROTECT,
+        related_name='veiculos_por_operacao',
+        verbose_name="Configuração Operacional",
+        null=True,
+        blank=True,
+        help_text="Configuração de eixos e operação do veículo"
+    )
     
     # Datas
     data_aquisicao = models.DateField(blank=True, null=True)
@@ -60,7 +97,7 @@ class Vehicle(models.Model):
         ordering = ['placa']
 
     def __str__(self):
-        return f"{self.placa} - {self.modelo}"
+        return f"{self.placa} - {self.modelo_veiculo}"
     
     def precisa_manutencao(self):
         """Verifica se veículo precisa de manutenção"""
@@ -77,22 +114,30 @@ class Vehicle(models.Model):
 
 class Position(models.Model):
     """Posição de pneu em um veículo"""
-    TIPO_EIXO_CHOICES = [
-        ('DIANTEIRO', 'Dianteiro'),
-        ('TRACAO', 'Tração'),
-        ('LIVRE', 'Livre'),
-    ]
     
     veiculo = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='posicoes_pneu')
     
     # Identificação da posição
-    posicao = models.CharField(max_length=50, help_text='Ex: 1E, 1D, 2E, 2D')
-    eixo = models.IntegerField(help_text='Número do eixo')
-    tipo_eixo = models.CharField(max_length=20, choices=TIPO_EIXO_CHOICES, default='LIVRE')
-    lado = models.CharField(max_length=1, choices=[('E', 'Esquerdo'), ('D', 'Direito')])
+    mapa_posicao = models.ForeignKey(
+        'configuracoes.MapaPosicaoPneu',
+        on_delete=models.PROTECT,
+        related_name='posicoes_veiculos_mapa',
+        verbose_name="Mapa de Posição",
+        null=True,
+        blank=True,
+        help_text="Mapeamento da posição do pneu no veículo"
+    )
     
     # Medida recomendada
-    medida = models.CharField(max_length=50, help_text='Medida do pneu recomendada')
+    medida_recomendada = models.ForeignKey(
+        'configuracoes.MedidaPorPosicao',
+        on_delete=models.PROTECT,
+        related_name='posicoes_veiculos_medida',
+        verbose_name="Medida Recomendada",
+        null=True,
+        blank=True,
+        help_text="Medida de pneu recomendada para esta posição"
+    )
     
     # Pneu atual (será vinculado ao pilar de pneus)
     pneu_atual_codigo = models.CharField(max_length=50, blank=True, null=True)
@@ -102,11 +147,11 @@ class Position(models.Model):
     class Meta:
         verbose_name = 'Posição de Pneu'
         verbose_name_plural = 'Posições de Pneus'
-        ordering = ['veiculo', 'ordem', 'eixo', 'lado']
-        unique_together = ['veiculo', 'posicao']
+        ordering = ['veiculo', 'ordem']
+        unique_together = ['veiculo', 'mapa_posicao']
 
     def __str__(self):
-        return f"{self.veiculo.placa} - {self.posicao}"
+        return f"{self.veiculo.placa} - {self.mapa_posicao}"
 
 
 class HistoricoKm(models.Model):

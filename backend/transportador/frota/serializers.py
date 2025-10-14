@@ -5,9 +5,24 @@ import re
 class VehicleSerializer(serializers.ModelSerializer):
     """Serializer para veículos com validações de negócio"""
     
+    empresa_nome = serializers.CharField(source='empresa.nome', read_only=True)
+    filial_nome = serializers.CharField(source='filial.nome', read_only=True)
+    filial_codigo = serializers.CharField(source='filial.codigo', read_only=True)
+    
+    modelo_veiculo_nome = serializers.CharField(source='modelo_veiculo.familia_modelo', read_only=True)
+    modelo_veiculo_marca = serializers.CharField(source='modelo_veiculo.marca', read_only=True)
+    configuracao_operacional_op_code = serializers.CharField(source='configuracao_operacional.op_code', read_only=True)
+    
     class Meta:
         model = Vehicle
-        fields = "__all__"
+        fields = [
+            "id", "empresa", "empresa_nome", "filial", "filial_nome", "filial_codigo",
+            "placa", "modelo_veiculo", "modelo_veiculo_nome", "modelo_veiculo_marca",
+            "ano_fabricacao", "ano_modelo", "tipo", "status", "km", "km_ultima_manutencao",
+            "km_proxima_manutencao", "motorista", "chassi", "renavam", "capacidade_carga",
+            "configuracao_operacional", "configuracao_operacional_op_code",
+            "data_aquisicao", "data_venda", "observacoes", "criado_em", "atualizado_em"
+        ]
         read_only_fields = ['criado_em', 'atualizado_em']
     
     def validate_placa(self, value):
@@ -93,26 +108,6 @@ class VehicleSerializer(serializers.ModelSerializer):
         
         return value
     
-    def validate_numero_eixos(self, value):
-        """Valida número de eixos"""
-        if value < 2:
-            raise serializers.ValidationError("Veículo deve ter no mínimo 2 eixos")
-        
-        if value > 10:
-            raise serializers.ValidationError("Número de eixos muito alto, verifique o valor")
-        
-        return value
-    
-    def validate_total_posicoes_pneus(self, value):
-        """Valida total de posições de pneus"""
-        if value < 4:
-            raise serializers.ValidationError("Veículo deve ter no mínimo 4 posições de pneus")
-        
-        if value > 50:
-            raise serializers.ValidationError("Número de posições muito alto, verifique o valor")
-        
-        return value
-    
     def validate(self, data):
         """Validações cruzadas"""
         # Valida que KM atual >= KM última manutenção
@@ -150,56 +145,25 @@ class PositionSerializer(serializers.ModelSerializer):
     """Serializer para posições de pneus com validações"""
     
     veiculo_placa = serializers.CharField(source='veiculo.placa', read_only=True)
+    mapa_posicao_id = serializers.CharField(source='mapa_posicao.position_id', read_only=True)
+    medida_recomendada_medidas = serializers.CharField(source='medida_recomendada.medidas_tipicas', read_only=True)
     
     class Meta:
         model = Position
-        fields = ["id", "veiculo", "veiculo_placa", "posicao", "eixo", "tipo_eixo", "lado", "medida", "pneu_atual_codigo", "ordem"]
+        fields = [
+            "id", "veiculo", "veiculo_placa", "mapa_posicao", "mapa_posicao_id",
+            "medida_recomendada", "medida_recomendada_medidas", "pneu_atual_codigo", "ordem"
+        ]
         read_only_fields = ['id']
-    
-    def validate_eixo(self, value):
-        """Valida número do eixo"""
-        if value < 1:
-            raise serializers.ValidationError("Número do eixo deve ser maior que zero")
-        
-        if value > 10:
-            raise serializers.ValidationError("Número do eixo muito alto")
-        
-        return value
-    
-    def validate_posicao(self, value):
-        """Valida formato da posição"""
-        if not value:
-            raise serializers.ValidationError("Posição é obrigatória")
-        
-        # Formato esperado: 1E, 1D, 2E, 2D, etc.
-        if not re.match(r'^\d+[ED]$', value.upper()):
-            raise serializers.ValidationError(
-                "Formato de posição inválido. Use formato como 1E, 1D, 2E, etc."
-            )
-        
-        return value.upper()
-    
-    def validate_medida(self, value):
-        """Valida formato da medida do pneu"""
-        if not value:
-            raise serializers.ValidationError("Medida é obrigatória")
-        
-        # Formato esperado: 295/80R22.5
-        if not re.match(r'^\d+/\d+R\d+\.?\d*$', value):
-            raise serializers.ValidationError(
-                "Formato de medida inválido. Use formato como 295/80R22.5"
-            )
-        
-        return value
     
     def validate(self, data):
         """Validações cruzadas"""
         veiculo = data.get('veiculo')
-        posicao = data.get('posicao')
+        mapa_posicao = data.get('mapa_posicao')
         
-        # Verifica se já existe uma posição com o mesmo nome no veículo
-        if veiculo and posicao:
-            qs = Position.objects.filter(veiculo=veiculo, posicao=posicao)
+        # Verifica se já existe uma posição com o mesmo mapa_posicao no veículo
+        if veiculo and mapa_posicao:
+            qs = Position.objects.filter(veiculo=veiculo, mapa_posicao=mapa_posicao)
             
             # Se estamos atualizando, exclui o registro atual da verificação
             if self.instance:
@@ -207,7 +171,7 @@ class PositionSerializer(serializers.ModelSerializer):
             
             if qs.exists():
                 raise serializers.ValidationError({
-                    'posicao': f'Já existe uma posição {posicao} neste veículo'
+                    'mapa_posicao': f'Já existe uma posição com este mapa de posição ({mapa_posicao.position_id}) neste veículo'
                 })
         
         return data

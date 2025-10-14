@@ -96,13 +96,6 @@ export default function App(){
         <Route path="ia/gamificacao" element={<IAGamificacao />} />
         <Route path="ia/garantias" element={<IAGarantias />} />
 
-        <Route path="financeiro" element={<Financeiro />} />
-        <Route path="compras" element={<Compras />} />
-        <Route path="eventos" element={<Eventos />} />
-        <Route path="relatorios" element={<Relatorios />} />
-        <Route path="configuracoes" element={<Configuracoes />} />
-        <Route path="minha-empresa" element={<MinhaEmpresa />} />
-
         {/* Empresas e Filiais */}
         <Route path="empresas" element={<EmpresasList />} />
         <Route path="empresas/create" element={<EmpresaForm />} />
@@ -110,6 +103,13 @@ export default function App(){
         <Route path="filiais" element={<FiliaisList />} />
         <Route path="filiais/create" element={<FilialForm />} />
         <Route path="filiais/:id/edit" element={<FilialForm />} />
+
+        <Route path="financeiro" element={<Financeiro />} />
+        <Route path="compras" element={<Compras />} />
+        <Route path="eventos" element={<Eventos />} />
+        <Route path="relatorios" element={<Relatorios />} />
+        <Route path="configuracoes" element={<Configuracoes />} />
+        <Route path="minha-empresa" element={<MinhaEmpresa />} />
       </Route>
 
       {/* Rota para Motorista */}

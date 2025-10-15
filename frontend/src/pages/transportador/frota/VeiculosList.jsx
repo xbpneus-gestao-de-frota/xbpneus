@@ -12,7 +12,7 @@ import PageHeader from "../../../components/PageHeader";
 import api from "../../../api/http";
 
 const CANDIDATES = ["/api/transportador/frota/veiculos/", "/api/frota/veiculos/", "/api/veiculos/"];
-const MOCK = ()=>[{ id:1, placa:\'ABC1D23\', modelo:\'Cavalo Mecânico\', km:458200, motorista:\'João Silva\' }];
+const MOCK = ()=>[{ id:1, placa:'ABC1D23', modelo:'Cavalo Mecânico', km:458200, motorista:'João Silva' }];
 
 export default function ListPage(){
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ export default function ListPage(){
     }
   ];
   const [selectedCols, setSelectedCols] = useState(cols.map(c=>c.label));
-  useEffect(()=>{ try{ const saved = localStorage.getItem(\'cols:\'+window.location.pathname); if(saved){ setSelectedCols(JSON.parse(saved)); } }catch{} }, []);
+  useEffect(()=>{ try{ const saved = localStorage.getItem('cols:'+window.location.pathname); if(saved){ setSelectedCols(JSON.parse(saved)); } }catch{} }, []);
   const visibleCols = cols.filter(c => selectedCols.includes(c.label));
 
 

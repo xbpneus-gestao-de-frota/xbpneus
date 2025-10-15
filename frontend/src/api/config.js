@@ -83,7 +83,70 @@ export const API_ENDPOINTS = {
     
     // Auditoria
     auditoria: `${API_BASE_URL}/api/transportador/auditoria/logs/`,
+    
+    // Empresas e Filiais
+    empresas: `${API_BASE_URL}/api/transportador/empresas/empresas/`,
+    filiais: `${API_BASE_URL}/api/transportador/empresas/filiais/`,
+    
+    // Motoristas
+    motoristasInternos: `${API_BASE_URL}/api/transportador/motorista-interno/motoristas/`,
+    motoristasExternos: `${API_BASE_URL}/api/transportador/motorista-externo/motoristas-externos/`,
+    vinculosMotorista: `${API_BASE_URL}/api/transportador/motorista-interno/vinculos/`,
+    jornadasMotorista: `${API_BASE_URL}/api/transportador/motorista-interno/jornadas/`,
+    mensagensMotorista: `${API_BASE_URL}/api/transportador/motorista-interno/mensagens/`,
+    alertasMotorista: `${API_BASE_URL}/api/transportador/motorista-interno/alertas/`,
+    alocacoesMotorista: `${API_BASE_URL}/api/transportador/motorista-externo/alocacoes-motorista/`,
+    
+    // Clientes
+    clientes: `${API_BASE_URL}/api/transportador/clientes/clientes/`,
+    contatosClientes: `${API_BASE_URL}/api/transportador/clientes/contatos/`,
+    
+    // Fornecedores
+    fornecedores: `${API_BASE_URL}/api/transportador/fornecedores/fornecedores/`,
+    contatosFornecedores: `${API_BASE_URL}/api/transportador/fornecedores/contatos/`,
+    
+    // Viagens
+    viagens: `${API_BASE_URL}/api/transportador/viagens/viagens/`,
+    cargasViagem: `${API_BASE_URL}/api/transportador/viagens/cargas/`,
+    paradasViagem: `${API_BASE_URL}/api/transportador/viagens/paradas/`,
+    
+    // Entregas
+    entregas: `${API_BASE_URL}/api/transportador/entregas/entregas/`,
+    pods: `${API_BASE_URL}/api/transportador/entregas/pods/`,
+    ocorrenciasEntregas: `${API_BASE_URL}/api/transportador/entregas/ocorrencias/`,
+    tentativasEntregas: `${API_BASE_URL}/api/transportador/entregas/tentativas/`,
+    
+    // Combustível
+    postosCombustivel: `${API_BASE_URL}/api/transportador/combustivel/postos/`,
+    abastecimentos: `${API_BASE_URL}/api/transportador/combustivel/abastecimentos/`,
+    consumoMensal: `${API_BASE_URL}/api/transportador/combustivel/consumo-mensal/`,
+    
+    // Multas
+    multas: `${API_BASE_URL}/api/transportador/multas/multas/`,
+    recursosMultas: `${API_BASE_URL}/api/transportador/multas/recursos/`,
+    pontuacaoCNH: `${API_BASE_URL}/api/transportador/multas/pontuacao-cnh/`,
+    
+    // Contratos
+    contratos: `${API_BASE_URL}/api/transportador/contratos/contratos/`,
+    aditivosContratos: `${API_BASE_URL}/api/transportador/contratos/aditivos/`,
+    
+    // Custos
+    categoriasCustos: `${API_BASE_URL}/api/transportador/custos/categorias/`,
+    custos: `${API_BASE_URL}/api/transportador/custos/custos/`,
+    custoPorKm: `${API_BASE_URL}/api/transportador/custos/custo-por-km/`,
+    
+    // Pagamentos
+    contasPagar: `${API_BASE_URL}/api/transportador/pagamentos/contas-pagar/`,
+    contasReceber: `${API_BASE_URL}/api/transportador/pagamentos/contas-receber/`,
+    pagamentos: `${API_BASE_URL}/api/transportador/pagamentos/pagamentos/`,
+    
+    // Rastreamento
+    posicoesRastreamento: `${API_BASE_URL}/api/transportador/rastreamento/posicoes/`,
+    cercasEletronicas: `${API_BASE_URL}/api/transportador/rastreamento/cercas/`,
+    violacoesCercas: `${API_BASE_URL}/api/transportador/rastreamento/violacoes/`,
+    historicoRastreamento: `${API_BASE_URL}/api/transportador/rastreamento/historico/`,
   },
 };
 
 export default API_ENDPOINTS;
+

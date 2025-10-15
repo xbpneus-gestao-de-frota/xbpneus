@@ -3,8 +3,11 @@
 Teste Final Completo - Sistema 100% Funcional
 Sistema XBPneus - Transportador
 """
-import requests
+import os
 import json
+import requests
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 BASE_URL = "http://localhost:8000"
 
@@ -36,8 +39,8 @@ def test_login():
     response = requests.post(
         f"{BASE_URL}/api/transportador/login/",
         json={
-            "email": "transportador.novo@xbpneus.com",
-            "password": "senha123"
+            "email": "transportador.teste@xbpneus.com",
+            "password": "Teste@2025"
         }
     )
     

@@ -11,7 +11,8 @@ import {
   CheckCircle,
   Clock,
   DollarSign,
-  Activity
+  Activity,
+  Building2
 } from "lucide-react";
 
 function StatCard({ title, value, icon: Icon, trend, color = "blue" }) {
@@ -188,11 +189,46 @@ export default function Dashboard() {
         <h2 className="mb-4 text-xl font-semibold text-white">Ações Rápidas</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <QuickAction
+            title="Empresas"
+            description="Gerenciar empresas, filiais e agregados"
+            icon={Building2}
+            to="/dashboard/empresas-dashboard"
+            color="blue"
+          />
+            <QuickAction
+              title="Frota"
+              description="Gerenciar veículos, motoristas e rastreamento"
+              icon={Truck}
+              to="/dashboard/frota-dashboard"
+              color="cyan"
+            />
+            <QuickAction
+              title="Pneus"
+              description="Gerenciar o ciclo de vida dos pneus da frota"
+              icon={Circle}
+              to="/dashboard/pneus-dashboard"
+              color="purple"
+            />
+            <QuickAction
+              title="Estoque"
+              description="Gerenciar movimentações e inventário do estoque"
+              icon={Package}
+              to="/dashboard/estoque-dashboard"
+              color="orange"
+            />
+            <QuickAction
+              title="Manutenção"
+              description="Gerenciar ordens de serviço e testes pós-manutenção"
+              icon={Wrench}
+              to="/dashboard/manutencao-dashboard"
+              color="purple"
+            />
+          <QuickAction
             title="Adicionar Veículo"
             description="Cadastrar novo veículo na frota"
             icon={Truck}
             to="/dashboard/frota/veiculos"
-            color="blue"
+            color="green"
           />
           <QuickAction
             title="Registrar Pneu"
@@ -207,13 +243,6 @@ export default function Dashboard() {
             icon={Wrench}
             to="/dashboard/manutencao/os"
             color="orange"
-          />
-          <QuickAction
-            title="Movimentação"
-            description="Registrar movimentação de estoque"
-            icon={Package}
-            to="/dashboard/estoque/movimentacoes"
-            color="green"
           />
         </div>
       </div>

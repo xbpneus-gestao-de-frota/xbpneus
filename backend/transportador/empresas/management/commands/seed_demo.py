@@ -115,7 +115,7 @@ class Command(BaseCommand):
             defaults={"medida":"295/80R22.5","marca":"XBRI","modelo":"EcoWayF1","status":"APLICADO","profundidade_sulco":16.0}
         )
 
-        pos_2ei = PosicaoPneu.objects.filter(veiculo=veic, codigo="2E-I").first() or                       PosicaoPneu.objects.filter(veiculo=veic).first()
+        pos_2ei = PosicaoPneu.objects.filter(veiculo=veic, codigo="2E-I").first() or                       PosicaoPneu.objects.filter(veic).first()
         if pos_2ei:
             AplicacaoPneu.objects.get_or_create(
                 empresa=empresa, pneu=p2, veiculo=veic, posicao_codigo=pos_2ei.codigo,
@@ -145,3 +145,4 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Seed de demonstração finalizado."))
         self.stdout.write("Usuário admin: admin / admin123")
+

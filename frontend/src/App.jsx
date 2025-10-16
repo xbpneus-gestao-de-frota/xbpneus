@@ -31,6 +31,7 @@ import VeiculoCreate from "./pages/transportador/frota/VeiculoCreate";
 import VeiculoEdit from "./pages/transportador/frota/VeiculoEdit";
 import VehicleDetail from "./pages/transportador/frota/VehicleDetail";
 import PosicoesList from "./pages/transportador/frota/PosicoesList";
+import MotoristasList from "./pages/transportador/frota-dashboard/motoristas/MotoristasList";
 
 import PneusList from "./pages/transportador/pneus/PneusList";
 import PneuCreate from "./pages/transportador/pneus/PneuCreate";
@@ -74,6 +75,7 @@ export default function App(){
         <Route path="frota/veiculos/:id/edit" element={<VeiculoEdit />} />
         <Route path="frota/veiculos/:id" element={<VehicleDetail />} />
         <Route path="frota/posicoes" element={<PosicoesList />} />
+<Route path="frota/motoristas" element={<MotoristasList />} />
 
         <Route path="pneus" element={<Pneus />} />
         <Route path="pneus/lista" element={<PneusList />} />

@@ -85,6 +85,16 @@ try_include("api/transportador/integracoes/", "backend.transportador.integracoes
 try_include("api/transportador/configuracoes/", "backend.transportador.configuracoes.urls")
 try_include("api/transportador/empresas/", "backend.transportador.empresas.urls")
 
+try_include("api/transportador/financeiro/", "backend.transportador.transportador_financeiro.urls")
+try_include("api/transportador/motorista/", "backend.transportador.transportador_motorista.urls")
+try_include("api/transportador/relatorios_transportador/", "backend.transportador.transportador_relatorios.urls")
+try_include("api/transportador/tr/", "backend.transportador.transportador_tr.urls")
+try_include("api/transportador/implemento/", "backend.transportador.implemento.urls")
+try_include("api/transportador/analise_pneus/", "backend.transportador.analise_pneus.urls")
+try_include("api/transportador/garantias/", "backend.transportador.garantias.urls")
+try_include("api/transportador/conexao/", "backend.transportador.conexao.urls")
+try_include("api/transportador/habilitacoes/", "backend.transportador.habilitacoes.urls")
+
 # IA - Novo Módulo
 try_include("api/transportador/ia/", "backend.transportador.ia_pneus.urls")
 try_include("api/transportador/motorista-externo/", "backend.transportador.motorista_externo.urls")

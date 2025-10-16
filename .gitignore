@@ -1,4 +1,17 @@
+# Ignorar ambientes virtuais
+venv/
 
+# Ignorar pastas de dependências do frontend
+node_modules/
 
-venc/
+# Ignorar arquivos de cache do Python
+**/__pycache__/
+
+# Ignorar arquivos de log e zip gerados
+xbpneus_atualizado.zip
+zip_output.log
+
+# Ignorar arquivos temporários
+zioGPx92
+ziYvf0Kn
 

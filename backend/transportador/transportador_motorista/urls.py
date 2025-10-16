@@ -1,1 +1,11 @@
-# URLs for transportador_motorista
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import MotoristaTransportadorViewSet
+
+router = DefaultRouter()
+router.register(r'motoristas', MotoristaTransportadorViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+

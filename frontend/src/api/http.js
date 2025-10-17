@@ -47,7 +47,7 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
       try {
-        const { data } = await axios.post((import.meta.env.VITE_API_URL || "http://localhost:8000") + "/api/users/refresh/", { refresh });
+        const { data } = await axios.post((import.meta.env.VITE_API_URL || "http://localhost:8000") + "/api/token/refresh/", { refresh });
         const newAccess = data.access;
         localStorage.setItem("access_token", newAccess);
         api.defaults.headers.common.Authorization = `Bearer ${newAccess}`;

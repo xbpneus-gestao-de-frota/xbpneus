@@ -6,8 +6,22 @@ from rest_framework.response import Response
 from backend.common.audit import AuditedModelViewSet
 from backend.common.export import export_csv, export_xlsx, export_csv_streaming
 from .models import Tire, Application
+import logging
 from .serializers import TireSerializer, ApplicationSerializer
+
+logger = logging.getLogger(__name__)
 class TireViewSet(AuditedModelViewSet):
+    def create(self, request, *args, **kwargs):
+        logger.info(f"[DEBUG] Chegou no TireViewSet.create. Método: {request.method}")
+        logger.info(f"[DEBUG] Usuário: {request.user}")
+        logger.info(f"[DEBUG] Dados da Requisição: {request.data}")
+
+        try:
+            return super().create(request, *args, **kwargs)
+        except Exception as e:
+            logger.error(f"[DEBUG] Erro ao criar pneu: {e}", exc_info=True)
+            raise
+
     queryset = Tire.objects.all().order_by("id")
     serializer_class = TireSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]

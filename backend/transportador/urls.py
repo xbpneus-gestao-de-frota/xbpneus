@@ -13,5 +13,7 @@ urlpatterns = [
     path('profile/', profile_view, name='transportador-profile'),
     path("me/", me_view, name="transportador-me"),
     path("motorista-externo/", include("backend.transportador.motorista_externo.urls")),
+    path("pneus/", include("backend.transportador.pneus.urls")),
+    path("frota/", include("backend.transportador.frota.urls")),
 ]
 

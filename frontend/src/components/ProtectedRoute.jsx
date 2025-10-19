@@ -10,6 +10,9 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
   const token = localStorage.getItem("access_token");
   const userRole = getUserRole();
 
+  console.log("ProtectedRoute: Token", token ? "Present" : "Absent");
+  console.log("ProtectedRoute: User Role", userRole);
+
   // Se não estiver autenticado, redireciona para login
   if (!token) {
     return <Navigate to="/login" replace />;

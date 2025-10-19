@@ -127,7 +127,7 @@ class TestTransportadorFuncionalidades(TestCase):
         # Fazer logout
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
         logout_response = self.client.post(
-            "/api/logout/",
+            "/api/auth/logout/",
             {"refresh": refresh_token},
             format="json"
         )

@@ -86,62 +86,64 @@ export default function App(){
 
       {/* Rotas para Transportador */}
       <Route path="/dashboard" element={<ProtectedRoute allowedRoles={["transportador"]}><RequireAuth><LayoutTransportador /></RequireAuth></ProtectedRoute>}>
-        <Route index element={<IndexTransportador />} />
+        <Route index element={<RequireAuth><IndexTransportador /></RequireAuth>} />
         
-        <Route path="frota" element={<Frota />} />
-        <Route path="frota/veiculos" element={<VeiculosList />} />
-        <Route path="frota/veiculos/create" element={<VeiculoCreate />} />
-        <Route path="frota/veiculos/:id/edit" element={<VeiculoEdit />} />
-        <Route path="frota/veiculos/:id" element={<VehicleDetail />} />
-        <Route path="frota/posicoes" element={<PosicoesList />} />
-        <Route path="frota/motoristas" element={<Motoristas />} />
-        <Route path="frota/implementos" element={<Implementos />} />
-        <Route path="frota/documentos" element={<Documentos />} />
-        <Route path="frota/rastreamento" element={<Rastreamento />} />
+        <Route path="frota" element={<RequireAuth><Frota /></RequireAuth>} />
+        <Route path="frota/veiculos" element={<RequireAuth><VeiculosList /></RequireAuth>} />
+        <Route path="frota/veiculos/create" element={<RequireAuth><VeiculoCreate /></RequireAuth>} />
+        <Route path="frota/veiculos/:id/edit" element={<RequireAuth><VeiculoEdit /></RequireAuth>} />
+        <Route path="frota/veiculos/:id" element={<RequireAuth><VehicleDetail /></RequireAuth>} />
+        <Route path="frota/posicoes" element={<RequireAuth><PosicoesList /></RequireAuth>} />
+        <Route path="frota/motoristas" element={<RequireAuth><Motoristas /></RequireAuth>} />
+        <Route path="frota/implementos" element={<RequireAuth><Implementos /></RequireAuth>} />
+        <Route path="frota/documentos" element={<RequireAuth><Documentos /></RequireAuth>} />
+        <Route path="frota/rastreamento" element={<RequireAuth><Rastreamento /></RequireAuth>} />
 
-        <Route path="pneus" element={<Pneus />} />
-        <Route path="pneus/lista" element={<PneusList />} />
-        <Route path="pneus/create" element={<PneuCreate />} />
-        <Route path="pneus/:id/edit" element={<PneuEdit />} />
-        <Route path="pneus/aplicacoes" element={<AplicacoesList />} />
-        <Route path="pneus/manutencao-pneus" element={<ManutencaoPneus />} />
-        <Route path="pneus/analise-desgaste" element={<AnaliseDesgaste />} />
-        <Route path="pneus/garantias" element={<Garantias />} />
-        <Route path="pneus/eventos-pneus" element={<EventosPneus />} />
+        <Route path="pneus" element={<RequireAuth><Pneus /></RequireAuth>} />
+        <Route path="pneus/lista" element={<RequireAuth><PneusList /></RequireAuth>} />
+        <Route path="pneus/create" element={<RequireAuth><PneuCreate /></RequireAuth>} />
+        <Route path="pneus/:id/edit" element={<RequireAuth><PneuEdit /></RequireAuth>} />
+        <Route path="pneus/aplicacoes" element={<RequireAuth><AplicacoesList /></RequireAuth>} />
+        <Route path="pneus/manutencao-pneus" element={<RequireAuth><ManutencaoPneus /></RequireAuth>} />
+        <Route path="pneus/analise-desgaste" element={<RequireAuth><AnaliseDesgaste /></RequireAuth>} />
+        <Route path="pneus/garantias" element={<RequireAuth><Garantias /></RequireAuth>} />
+        <Route path="pneus/eventos-pneus" element={<RequireAuth><EventosPneus /></RequireAuth>} />
 
-        <Route path="estoque" element={<Estoque />} />
-        <Route path="estoque/movimentacoes" element={<MovimentacoesList />} />
-        <Route path="estoque/itens" element={<ItensEstoque />} />
-        <Route path="estoque/entradas-saidas" element={<EntradasSaidas />} />
-        <Route path="estoque/relatorios-estoque" element={<RelatoriosEstoque />} />
+        <Route path="estoque" element={<RequireAuth><Estoque /></RequireAuth>} />
+        <Route path="estoque/movimentacoes" element={<RequireAuth><MovimentacoesList /></RequireAuth>} />
+        <Route path="estoque/itens" element={<RequireAuth><ItensEstoque /></RequireAuth>} />
+        <Route path="estoque/entradas-saidas" element={<RequireAuth><EntradasSaidas /></RequireAuth>} />
+        <Route path="estoque/relatorios-estoque" element={<RequireAuth><RelatoriosEstoque /></RequireAuth>} />
 
-        <Route path="manutencao" element={<Manutencao />} />
-        <Route path="manutencao/ordens-servico" element={<OSList />} />
-        <Route path="manutencao/ordens-servico/create" element={<OSCreate />} />
-        <Route path="manutencao/ordens-servico/:id/edit" element={<OSEdit />} />
-        <Route path="manutencao/ordens-servico/:id" element={<OSDetail />} />
-        <Route path="manutencao/testes-pos-manutencao" element={<TestesList />} />
-        <Route path="manutencao/historico" element={<HistoricoManutencao />} />
-        <Route path="manutencao/planejamento-preventivo" element={<PlanejamentoPreventivo />} />
+        <Route path="manutencao" element={<RequireAuth><Manutencao /></RequireAuth>} />
+        <Route path="manutencao/ordens-servico" element={<RequireAuth><OSList /></RequireAuth>} />
+        <Route path="manutencao/ordens-servico/create" element={<RequireAuth><OSCreate /></RequireAuth>} />
+        <Route path="manutencao/ordens-servico/:id/edit" element={<RequireAuth><OSEdit /></RequireAuth>} />
+        <Route path="manutencao/ordens-servico/:id" element={<RequireAuth><OSDetail /></RequireAuth>} />
+        <Route path="manutencao/testes-pos-manutencao" element={<RequireAuth><TestesList /></RequireAuth>} />
+        <Route path="manutencao/historico" element={<RequireAuth><HistoricoManutencao /></RequireAuth>} />
+        <Route path="manutencao/planejamento-preventivo" element={<RequireAuth><PlanejamentoPreventivo /></RequireAuth>} />
 
-        <Route path="ia" element={<IADashboard />} />
-        <Route path="ia/analise" element={<IAAnalise />} />
-        <Route path="ia/gamificacao" element={<IAGamificacao />} />
-        <Route path="ia/garantias" element={<IAGarantias />} />
+        <Route path="ia" element={<RequireAuth><IADashboard /></RequireAuth>} />
+        <Route path="ia/analise" element={<RequireAuth><IAAnalise /></RequireAuth>} />
+        <Route path="ia/gamificacao" element={<RequireAuth><IAGamificacao /></RequireAuth>} />
+        <Route path="ia/garantias" element={<RequireAuth><IAGarantias /></RequireAuth>} />
 
-        <Route path="financeiro" element={<Financeiro />} />
-        <Route path="compras" element={<Compras />} />
-        <Route path="eventos" element={<Eventos />} />
+        <Route path="financeiro" element={<RequireAuth><Financeiro /></RequireAuth>} />
+        <Route path="compras" element={<RequireAuth><Compras /></RequireAuth>} />
+        <Route path="eventos" element={<RequireAuth><Eventos /></RequireAuth>} />
         
-        <Route path="relatorios" element={<Relatorios />} />
-        <Route path="relatorios/frota" element={<RelatoriosFrota />} />
-        <Route path="relatorios/pneus" element={<RelatoriosPneus />} />
-        <Route path="relatorios/estoque" element={<RelatoriosEstoque />} />
-        <Route path="relatorios/manutencao" element={<RelatoriosManutencao />} />
-        <Route path="relatorios/financeiro" element={<RelatoriosFinanceiros />} />
+        <Route path="relatorios" element={<RequireAuth><Relatorios /></RequireAuth>} />
+        <Route path="relatorios/frota" element={<RequireAuth><RelatoriosFrota /></RequireAuth>} />
+        <Route path="relatorios/pneus" element={<RequireAuth><RelatoriosPneus /></RequireAuth>} />
+        <Route path="relatorios/estoque" element={<RequireAuth><RelatoriosEstoque /></RequireAuth>} />
+        <Route path="relatorios/manutencao" element={<RequireAuth><RelatoriosManutencao /></RequireAuth>} />
+        <Route path="relatorios/financeiro" element={<RequireAuth><RelatoriosFinanceiros /></RequireAuth>} />
 
-        <Route path="configuracoes" element={<Configuracoes />} />
-        <Route path="minha-empresa" element={<MinhaEmpresa />} />
+        <Route path="configuracoes" element={<RequireAuth><Configuracoes /></RequireAuth>} />
+        <Route path="minha-empresa" element={<RequireAuth><MinhaEmpresa /></RequireAuth>} />
+        <Route path="empresas" element={<RequireAuth><EmBreve /></RequireAuth>} />
+        <Route path="filiais" element={<RequireAuth><EmBreve /></RequireAuth>} />
 
       </Route>
 
@@ -172,6 +174,9 @@ export default function App(){
           <RequireAuth><DashboardRecapagem /></RequireAuth>
         </ProtectedRoute>
       } />
+
+      {/* Rota padrão */}
+      <Route path="/" element={<Login />} />
     </Routes>
   );
 }

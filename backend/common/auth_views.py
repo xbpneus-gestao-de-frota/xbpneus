@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @api_view(['POST'])
@@ -15,9 +16,10 @@ def logout_view(request):
     Endpoint unificado de logout
     """
     try:
-        # Por enquanto, apenas retorna sucesso
-        # O token JWT expira naturalmente
-        # Se implementar blacklist, adicionar lógica aqui
+        # Adicionar o token de refresh à blacklist
+        refresh_token = request.data["refresh"]
+        token = RefreshToken(refresh_token)
+        token.blacklist()
         return Response({
             'message': 'Logout realizado com sucesso'
         }, status=status.HTTP_200_OK)

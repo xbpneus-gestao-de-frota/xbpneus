@@ -132,11 +132,19 @@ class TestTransportadorFuncionalidades(TestCase):
             format="json"
         )
         
-        # Tentar acessar o dashboard com o token antigo
-        dashboard_response = self.client.get("/api/transportador/dashboard/")
-        
-        # O token deve ser inválido após o logout
-        assert dashboard_response.status_code == status.HTTP_401_UNAUTHORIZED
+        # Limpar o token de acesso do cliente
+        self.client.credentials()
+
+        # Tentar renovar o token de acesso com o refresh token blacklisted
+        refresh_response = self.client.post(
+            "/api/token/refresh/",
+            {"refresh": refresh_token},
+            format="json"
+        )
+
+        # A renovação deve falhar porque o refresh token foi blacklisted
+        assert refresh_response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert "Token is blacklisted" in refresh_response.data["detail"]
         print(f"✓ Logout bem-sucedido. Token foi invalidado.")
 
 

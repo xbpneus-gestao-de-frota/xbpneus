@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,7 +10,7 @@ export default function Cadastro() {
     email: "",
     password: "",
     password_confirm: "",
-    
+    tipo_cliente: "",
   });
   const [errors, setErrors] = useState({});
   const [showSenha, setShowSenha] = useState(false);
@@ -57,8 +58,23 @@ export default function Cadastro() {
     let hasError = false;
     const newErrors = {};
 
+    if (!form.nome_razao_social) {
+      newErrors.nome_razao_social = "Nome/Razão Social é obrigatório";
+      hasError = true;
+    }
+
     if (!validarCNPJ(form.cnpj)) {
       newErrors.cnpj = "CNPJ inválido";
+      hasError = true;
+    }
+
+    if (!form.email) {
+      newErrors.email = "Email é obrigatório";
+      hasError = true;
+    }
+
+    if (!form.password || form.password.length < 6) {
+      newErrors.password = "Senha deve ter no mínimo 6 caracteres";
       hasError = true;
     }
 
@@ -67,9 +83,12 @@ export default function Cadastro() {
       hasError = true;
     }
 
-    
+    if (!form.tipo_cliente) {
+      newErrors.tipo_cliente = "Tipo de usuário é obrigatório";
+      hasError = true;
+    }
 
-        if (hasError) {
+    if (hasError) {
       setErrors(newErrors);
       return;
     }
@@ -78,24 +97,42 @@ export default function Cadastro() {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-     
-      // Mapear tipo de cliente para o endpoint correto
-      const endpoint = `/api/transportador/register/`;
       
-      // Preparar payload baseado no tipo de cliente
-      let payload = {
+      // Mapear tipo de cliente para o endpoint correto
+      let endpoint = '';
+      switch(form.tipo_cliente) {
+        case 'transportador':
+          endpoint = '/api/transportador/register/';
+          break;
+        case 'motorista':
+          endpoint = '/api/motorista/register/';
+          break;
+        case 'revenda':
+          endpoint = '/api/revenda/register/';
+          break;
+        case 'borracharia':
+          endpoint = '/api/borracharia/register/';
+          break;
+        case 'recapagem':
+          endpoint = '/api/recapagem/register/';
+          break;
+        default:
+          setMessage('Tipo de usuário inválido');
+          setLoading(false);
+          return;
+      }
+      
+      // Preparar payload
+      const payload = {
         email: form.email,
         password: form.password,
         password_confirm: form.password_confirm,
         telefone: form.telefone,
         nome_razao_social: form.nome_razao_social,
         cnpj: form.cnpj,
+        tipo_usuario: form.tipo_cliente, // Adicionado o tipo de usuário ao payload
       };
 
-      // Remover tipo_cliente do payload, pois já está na URL
-
-
-      
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: {
@@ -198,13 +235,11 @@ export default function Cadastro() {
                 value={form.nome_razao_social}
                 onChange={(e) => setForm({ ...form, nome_razao_social: e.target.value })}
                 className="w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg px-3 py-2 bg-white text-blue-900"
-
+                required
               />
-              {errors.nome && (
-                <div className="text-red-500 text-sm mt-1">{errors.nome}</div>
+              {errors.nome_razao_social && (
+                <div className="text-red-500 text-sm mt-1">{errors.nome_razao_social}</div>
               )}
-
-
             </div>
 
             <div>
@@ -215,13 +250,12 @@ export default function Cadastro() {
                 value={form.cnpj}
                 onChange={handleCNPJChange}
                 className="w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg px-3 py-2 bg-white text-blue-900"
-
                 maxLength="14"
+                required
               />
               {errors.cnpj && (
                 <div className="text-red-500 text-sm mt-1">{errors.cnpj}</div>
               )}
-
             </div>
 
             <div>
@@ -236,7 +270,6 @@ export default function Cadastro() {
               {errors.contato && (
                 <div className="text-red-500 text-sm mt-1">{errors.contato}</div>
               )}
-
             </div>
 
             <div>
@@ -247,12 +280,11 @@ export default function Cadastro() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg px-3 py-2 bg-white text-blue-900"
-
+                required
               />
               {errors.email && (
                 <div className="text-red-500 text-sm mt-1">{errors.email}</div>
               )}
-
             </div>
 
             <div className="relative">
@@ -263,8 +295,8 @@ export default function Cadastro() {
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg px-3 py-2 pr-10 bg-white text-blue-900"
-
                 minLength="6"
+                required
               />
               <span
                 className="absolute right-3 top-2 text-gray-600 cursor-pointer"
@@ -272,10 +304,9 @@ export default function Cadastro() {
               >
                 👁
               </span>
-              {errors.senha && (
-                <div className="text-red-500 text-sm mt-1">{errors.senha}</div>
+              {errors.password && (
+                <div className="text-red-500 text-sm mt-1">{errors.password}</div>
               )}
-
             </div>
 
             <div className="relative">
@@ -286,7 +317,7 @@ export default function Cadastro() {
                 value={form.password_confirm}
                 onChange={handleConfirmarSenhaChange}
                 className="w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg px-3 py-2 pr-10 bg-white text-blue-900"
-
+                required
               />
               <span
                 className="absolute right-3 top-2 text-gray-600 cursor-pointer"
@@ -310,8 +341,9 @@ export default function Cadastro() {
                 style={{ 
                   backgroundColor: "white",
                   opacity: 1,
+                  color: form.tipo_cliente ? "#1e40af" : "#6b7280",
                 }}
-
+                required
               >
                 <option value="" style={{ backgroundColor: "white" }}>Selecione o tipo de usuário</option>
                 <option value="transportador" style={{ backgroundColor: "white" }}>Transportador</option>
@@ -320,7 +352,9 @@ export default function Cadastro() {
                 <option value="borracharia" style={{ backgroundColor: "white" }}>Borracharia</option>
                 <option value="recapagem" style={{ backgroundColor: "white" }}>Recapagem</option>
               </select>
-
+              {errors.tipo_cliente && (
+                <div className="text-red-500 text-sm mt-1">{errors.tipo_cliente}</div>
+              )}
             </div>
 
             <button

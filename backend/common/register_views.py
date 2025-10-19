@@ -1,3 +1,4 @@
+
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -23,6 +24,15 @@ def register_full_view(request):
     
     tipo_usuario = tipo_usuario.lower()
     
+    all_user_models = {
+        "transportador": UsuarioTransportador,
+        "motorista": UsuarioMotorista,
+        "borracharia": UsuarioBorracharia,
+        "revenda": UsuarioRevenda,
+        "recapagem": UsuarioRecapagem,
+        "motorista_externo": MotoristaExterno,
+    }
+
     tipo_map = {
         "transportador": {
             "model": UsuarioTransportador,
@@ -66,7 +76,6 @@ def register_full_view(request):
     config = tipo_map[tipo_usuario]
     model = config["model"]
     required_fields = config["required_fields"]
-    optional_fields = config.get("optional_fields", [])
     unique_fields = config.get("unique_fields", {})
     
     missing_fields = []
@@ -79,61 +88,52 @@ def register_full_view(request):
             "error": "Campos obrigatórios faltando",
             "campos_faltando": missing_fields
         }, status=status.HTTP_400_BAD_REQUEST)
-    
-    User = get_user_model()
-    if User.objects.filter(email=request.data.get("email")).exists():
-        return Response({
-            "error": "Email já cadastrado"
-        }, status=status.HTTP_400_BAD_REQUEST)
 
-    # Refatorar a lógica de verificação de campos únicos para ser mais específica
+    # Verificar se o email já existe em qualquer um dos modelos de usuário
+    email = request.data.get("email")
+    for user_model in all_user_models.values():
+        if user_model.objects.filter(email=email).exists():
+            return Response({
+                "error": "Email já cadastrado"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+    # Verificar campos únicos para o modelo específico
     for field, error_message in unique_fields.items():
-        if field in request.data and request.data[field]: # Apenas verificar se o campo foi fornecido e não está vazio
-            # Usar o modelo específico do perfil para a verificação de unicidade
+        if field in request.data and request.data[field]:
             if model.objects.filter(**{field: request.data[field]}).exists():
                 return Response({
                     "error": error_message
                 }, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        user = User.objects.create_user(
-            email=request.data["email"],
-            password=request.data["password"],
-            is_active=False
-        )
-
-        profile_data = {}
+        user_data = {}
         for field in required_fields:
-            if field not in ["email", "password"]:
-                profile_data[field] = request.data[field]
-        
+            user_data[field] = request.data[field]
+
+        # Adicionar campos opcionais, se existirem
+        optional_fields = config.get("optional_fields", [])
         for field in optional_fields:
             if field in request.data and request.data[field]:
-                profile_data[field] = request.data[field]
+                user_data[field] = request.data[field]
 
-        optional_profile_fields = ["endereco", "cidade", "estado", "cep", "empresa", "filial", "categoria_cnh"]
-        for field in optional_profile_fields:
-            if field in request.data:
-                profile_data[field] = request.data[field]
-        
-        profile_data["usuario"] = user
+        # Usar o manager do modelo específico para criar o usuário
+        user = model.objects.create_user(**user_data)
+        user.is_active = False # Manter inativo até aprovação
+        user.aprovado = False
+        user.save()
 
-        model.objects.create(**profile_data)
-        
         return Response({
             "message": "Cadastro realizado com sucesso! Aguarde aprovação do administrador.",
             "user": {
                 "id": user.id,
                 "email": user.email,
                 "tipo_usuario": tipo_usuario,
-                "aprovado": (MotoristaExterno.objects.get(usuario=user).aprovado if tipo_usuario == "motorista_externo" else user.is_active),
+                "aprovado": user.aprovado,
                 "is_active": user.is_active
             }
         }, status=status.HTTP_201_CREATED)
         
     except Exception as e:
-        if "user" in locals() and user.pk:
-            user.delete()
         return Response({
             "error": f"Erro ao criar usuário: {str(e)}"
         }, status=status.HTTP_400_BAD_REQUEST)

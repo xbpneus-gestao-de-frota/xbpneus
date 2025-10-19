@@ -15,3 +15,8 @@ zip_output.log
 zioGPx92
 ziYvf0Kn
 
+venv/
+staticfiles/
+installed_packages.txt
+pytest_results.txt
+

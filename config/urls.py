@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from backend.common.views import CustomTokenObtainPairView
 from backend.common.auth_views import logout_view, me_view
 from backend.common.register_views import register_full_view
+from backend.transportador.urls import TRANSPORTADOR_MODULES
 from importlib import import_module
 
 urlpatterns = [
@@ -49,55 +50,8 @@ try_include("api/revenda/", "backend.revenda.urls")
 try_include("api/recapagem/", "backend.recapagem.urls")
 
 # Módulos do Transportador
-try_include("api/transportador/frota/", "backend.transportador.frota.urls")
-try_include("api/transportador/pneus/", "backend.transportador.pneus.urls")
-try_include("api/transportador/manutencao/", "backend.transportador.manutencao.urls")
-try_include("api/transportador/estoque/", "backend.transportador.estoque.urls")
-try_include("api/transportador/loja/", "backend.transportador.loja.urls")
-try_include("api/transportador/motorista-interno/", "backend.transportador.motorista_interno.urls")
-try_include("api/transportador/custos/", "backend.transportador.custos.urls")
-try_include("api/transportador/combustivel/", "backend.transportador.combustivel.urls")
-try_include("api/transportador/multas/", "backend.transportador.multas.urls")
-try_include("api/transportador/documentos/", "backend.transportador.documentos.urls")
-try_include("api/transportador/viagens/", "backend.transportador.viagens.urls")
-try_include("api/transportador/clientes/", "backend.transportador.clientes.urls")
-try_include("api/transportador/fornecedores/", "backend.transportador.fornecedores.urls")
-try_include("api/transportador/seguros/", "backend.transportador.seguros.urls")
-try_include("api/transportador/contratos/", "backend.transportador.contratos.urls")
-try_include("api/transportador/faturamento/", "backend.transportador.faturamento.urls")
-try_include("api/transportador/pagamentos/", "backend.transportador.pagamentos.urls")
-try_include("api/transportador/telemetria/", "backend.transportador.telemetria.urls")
-try_include("api/transportador/rastreamento/", "backend.transportador.rastreamento.urls")
-try_include("api/transportador/rotas/", "backend.transportador.rotas.urls")
-try_include("api/transportador/entregas/", "backend.transportador.entregas.urls")
-try_include("api/transportador/dashboards/", "backend.transportador.dashboards.urls")
-try_include("api/transportador/notificacoes/", "backend.transportador.notificacoes.urls")
-try_include("api/transportador/almoxarifado/", "backend.transportador.almoxarifado.urls")
-try_include("api/transportador/relatorios/", "backend.transportador.relatorios.urls")
-try_include("api/transportador/cargas/", "backend.transportador.cargas.urls")
-try_include("api/transportador/pecas/", "backend.transportador.pecas.urls")
-try_include("api/transportador/ferramentas/", "backend.transportador.ferramentas.urls")
-try_include("api/transportador/epis/", "backend.transportador.epis.urls")
-try_include("api/transportador/treinamentos/", "backend.transportador.treinamentos.urls")
-try_include("api/transportador/compliance/", "backend.transportador.compliance.urls")
-try_include("api/transportador/alertas/", "backend.transportador.alertas.urls")
-try_include("api/transportador/integracoes/", "backend.transportador.integracoes.urls")
-try_include("api/transportador/configuracoes/", "backend.transportador.configuracoes.urls")
-try_include("api/transportador/empresas/", "backend.transportador.empresas.urls")
-
-try_include("api/transportador/financeiro/", "backend.transportador.transportador_financeiro.urls")
-try_include("api/transportador/motorista/", "backend.transportador.transportador_motorista.urls")
-try_include("api/transportador/relatorios_transportador/", "backend.transportador.transportador_relatorios.urls")
-try_include("api/transportador/tr/", "backend.transportador.transportador_tr.urls")
-try_include("api/transportador/implemento/", "backend.transportador.implemento.urls")
-try_include("api/transportador/analise_pneus/", "backend.transportador.analise_pneus.urls")
-try_include("api/transportador/garantias/", "backend.transportador.garantias.urls")
-try_include("api/transportador/conexao/", "backend.transportador.conexao.urls")
-try_include("api/transportador/habilitacoes/", "backend.transportador.habilitacoes.urls")
-
-# IA - Novo Módulo
-try_include("api/transportador/ia/", "backend.transportador.ia_pneus.urls")
-try_include("api/transportador/motorista-externo/", "backend.transportador.motorista_externo.urls")
+for prefix, module_path in TRANSPORTADOR_MODULES.items():
+    try_include(f"api/transportador/{prefix}/", module_path)
 
 # Outros
 try_include("api/reports/", "backend.reports.urls")

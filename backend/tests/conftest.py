@@ -1,9 +1,7 @@
-
 import pytest
-from rest_framework.test import APIClient
-from django.contrib.auth import get_user_model
 import django
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 # Configurar as settings do Django para os testes
 if not settings.configured:
@@ -62,6 +60,8 @@ if not settings.configured:
         AUTH_USER_MODEL='transportador.UsuarioTransportador',
     )
     django.setup()
+
+from rest_framework.test import APIClient
 
 @pytest.fixture
 def api_client():

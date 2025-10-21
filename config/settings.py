@@ -69,7 +69,16 @@ INSTALLED_APPS = [
     "backend.transportador.alertas",
     "backend.transportador.integracoes",
     "backend.transportador.configuracoes",
-    
+    "backend.transportador.auditoria",
+    "backend.transportador.notas_fiscais",
+    "backend.transportador.transportador_financeiro",
+    "backend.transportador.transportador_motorista",
+    "backend.transportador.transportador_relatorios",
+    "backend.transportador.transportador_tr",
+    "backend.transportador.implemento",
+    "backend.transportador.analise_pneus",
+    "backend.transportador.garantias",
+
     # IA - Novo Módulo
     "backend.transportador.ia_pneus",
     "backend.transportador.motorista_externo",

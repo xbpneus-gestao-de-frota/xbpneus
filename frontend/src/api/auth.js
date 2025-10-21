@@ -1,43 +1,82 @@
 import api from "./http";
 import { jwtDecode } from "jwt-decode";
 
-export async function login(email, password) {
+function persistSession(accessToken, refreshToken, userRoleFallback = "transportador") {
+  if (!accessToken || !refreshToken) {
+    throw new Error("Tokens de autenticação não recebidos.");
+  }
+
+  localStorage.setItem("access_token", accessToken);
+  localStorage.setItem("refresh_token", refreshToken);
+
+  let decodedToken = null;
   try {
-    // Adicionar timestamp para evitar cache
-    const timestamp = Date.now();
-    const { data } = await api.post(`/api/token/?t=${timestamp}`, { email, password });
-    const accessToken = data.access;
-    const refreshToken = data.refresh;
+    decodedToken = jwtDecode(accessToken);
+  } catch (decodeError) {
+    console.error("Falha ao decodificar token JWT:", decodeError);
+    throw new Error("Token de acesso inválido recebido do servidor.");
+  }
 
-    localStorage.setItem("access_token", accessToken);
-    localStorage.setItem("refresh_token", refreshToken);
+  const userRole = decodedToken.user_role || userRoleFallback;
+  const userId = decodedToken.user_id;
 
-    // Decodificar o token para obter o user_id e user_role
-    const decodedToken = jwtDecode(accessToken);
-    const userRole = decodedToken.user_role; // Assumindo que o papel do usuário está no token
-    const userId = decodedToken.user_id;
+  if (!userId) {
+    throw new Error("Token de acesso não contém o identificador do usuário.");
+  }
 
-    localStorage.setItem("user_role", userRole);
-    localStorage.setItem("user_id", userId);
+  localStorage.setItem("user_role", userRole);
+  localStorage.setItem("user_id", userId);
 
-    // Redirecionar para o dashboard apropriado com base no papel
-    let redirectUrl = "/dashboard"; // Default para transportador
-    
-    // Outros tipos de usuários têm rotas específicas
-    if (userRole && userRole !== 'transportador') {
-      redirectUrl = `/${userRole}/dashboard`;
+  let redirectUrl = "/dashboard";
+  if (userRole && userRole !== "transportador") {
+    redirectUrl = `/${userRole}/dashboard`;
+  }
+
+  localStorage.setItem("redirect_url", redirectUrl);
+
+  return { userRole, redirectUrl };
+}
+
+function wrapAndThrow(error) {
+  if (error.response) {
+    const message = error.response.data?.error || error.response.data?.detail;
+    if (message) {
+      const wrappedError = new Error(message);
+      wrappedError.response = error.response;
+      throw wrappedError;
     }
-    
-    localStorage.setItem("redirect_url", redirectUrl);
+  }
+  throw error;
+}
 
-    // Opcional: buscar dados completos do usuário se necessário
-    // const userData = await api.get(`/api/users/${userId}/`);
-    // localStorage.setItem("user_data", JSON.stringify(userData.data));
+export async function login(email, password) {
+  const timestamp = Date.now();
 
-    return { userRole, redirectUrl };
-  } catch (error) {
-    console.error("Erro no login:", error);
-    throw error;
+  try {
+    const { data } = await api.post(`/api/token/?t=${timestamp}`, { email, password });
+    return persistSession(data.access, data.refresh);
+  } catch (primaryError) {
+    const status = primaryError.response?.status;
+
+    if (status === 400 || status === 401 || status === 404) {
+      try {
+        const { data } = await api.post(`/api/motorista/login/?t=${timestamp}`, { email, password });
+        const tokens = data.tokens || {};
+        const session = persistSession(tokens.access, tokens.refresh, "motorista");
+
+        // Se o backend informar uma URL específica de redirecionamento, priorize-a
+        const redirectUrl = data.redirect || session.redirectUrl;
+        localStorage.setItem("redirect_url", redirectUrl);
+
+        return { userRole: session.userRole, redirectUrl };
+      } catch (motoristaError) {
+        console.error("Erro no login do motorista:", motoristaError);
+        wrapAndThrow(motoristaError);
+      }
+    }
+
+    console.error("Erro no login principal:", primaryError);
+    wrapAndThrow(primaryError);
   }
 }
 

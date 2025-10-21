@@ -38,10 +38,22 @@ def create_tokens_for_user(user):
     # Adiciona claims customizados
     refresh['user_id'] = user.id
     refresh['email'] = user.email
-    
+
     # Identifica o tipo de usuário usando ContentType
     content_type = ContentType.objects.get_for_model(user)
-    refresh['user_type'] = f"{content_type.app_label}.{content_type.model}"
+    user_type = f"{content_type.app_label}.{content_type.model}"
+    refresh['user_type'] = user_type
+
+    # Define o papel (role) do usuário para ser utilizado no frontend
+    role_map = {
+        'usuariotransportador': 'transportador',
+        'usuariomotorista': 'motorista',
+        'usuarioborracharia': 'borracharia',
+        'usuariorevenda': 'revenda',
+        'usuariorecapagem': 'recapagem',
+        'motoristaexterno': 'motorista_externo',
+    }
+    refresh['user_role'] = role_map.get(content_type.model, 'transportador')
     
     # Adiciona nome do usuário
     if hasattr(user, 'nome_completo'):

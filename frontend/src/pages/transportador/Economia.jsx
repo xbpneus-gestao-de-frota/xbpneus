@@ -13,8 +13,8 @@ const Economia = () => {
   const calcularEconomia = async () => {
     try {
       const [veiculos, pneus] = await Promise.all([
-        api.get('/transportador/frota/veiculos/'),
-        api.get('/transportador/pneus/pneus/')
+        api.get('/api/transportador/frota/veiculos/'),
+        api.get('/api/transportador/pneus/pneus/')
       ]);
 
       const totalVeiculos = veiculos.data.length;

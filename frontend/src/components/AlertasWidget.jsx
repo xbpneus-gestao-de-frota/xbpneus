@@ -12,8 +12,8 @@ const AlertasWidget = () => {
   const fetchAlertas = async () => {
     try {
       const [pneus, veiculos] = await Promise.all([
-        api.get('/transportador/pneus/pneus/'),
-        api.get('/transportador/frota/veiculos/')
+        api.get('/api/transportador/pneus/pneus/'),
+        api.get('/api/transportador/frota/veiculos/')
       ]);
 
       const alertasGerados = [];

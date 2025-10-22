@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import GarantiaViewSet
 
 router = DefaultRouter()
-router.register(r'garantias', GarantiaViewSet)
+router.register(r'garantias', GarantiaViewSet, basename='transportador-garantias')
 
 urlpatterns = [
     path('', include(router.urls)),

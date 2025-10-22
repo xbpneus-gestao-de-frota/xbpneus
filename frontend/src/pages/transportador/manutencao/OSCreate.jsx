@@ -27,7 +27,7 @@ const OSCreate = () => {
 
   const fetchVeiculos = async () => {
     try {
-      const response = await api.get('/transportador/frota/veiculos/');
+      const response = await api.get('/api/transportador/frota/veiculos/');
       setVeiculos(response.data);
     } catch (err) {
       console.error('Erro ao carregar veículos:', err);
@@ -44,7 +44,7 @@ const OSCreate = () => {
     setError(null);
 
     try {
-      await api.post('/transportador/manutencao/ordens-servico/', formData);
+      await api.post('/api/transportador/manutencao/ordens-servico/', formData);
       navigate('/dashboard/manutencao/ordens-servico');
     } catch (err) {
       setError(err.response?.data?.message || 'Erro ao criar ordem de serviço');

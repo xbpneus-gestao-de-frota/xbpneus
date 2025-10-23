@@ -1,0 +1,146 @@
+
+[94m============================================================
+VERIFICAÇÃO APRIMORADA DE FUNCIONALIDADES DE BACKEND
+Sistema XBPneus
+============================================================[0m
+
+[92m[OK][0m Conexão com servidor em http://localhost:8000 estabelecida
+
+[94m============================================================
+Testes de Endpoints de Documentação
+============================================================[0m
+
+[92m[OK][0m GET    http://localhost:8000/api/schema/                  - Status: 200
+        Schema OpenAPI
+[92m[OK][0m GET    http://localhost:8000/api/docs/                    - Status: 200
+        Documentação DRF
+
+[94m============================================================
+Testes de Autenticação
+============================================================[0m
+
+[91m[ERRO][0m POST   http://localhost:8000/api/users/register_full/     - Status: 400
+        Registro de novo usuário
+        Erro: Tipo de usuário é obrigatório
+[91m[ERRO][0m POST http://localhost:8000/api/token/ - Status: 400
+
+[94m============================================================
+Testes de Endpoints do Módulo Transportador
+============================================================[0m
+
+[92m[OK][0m GET    http://localhost:8000/api/transportador/motorista/ - Status: 200
+        Listagem de motoristas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/frota/     - Status: 200
+        Listagem de frotas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/pneus/     - Status: 200
+        Listagem de pneus
+[92m[OK][0m GET    http://localhost:8000/api/transportador/manutencao/ - Status: 200
+        Listagem de manutenções
+[92m[OK][0m GET    http://localhost:8000/api/transportador/estoque/   - Status: 200
+        Listagem de estoque
+[92m[OK][0m GET    http://localhost:8000/api/transportador/loja/      - Status: 200
+        Listagem de loja
+[92m[OK][0m GET    http://localhost:8000/api/transportador/custos/    - Status: 200
+        Listagem de custos
+[92m[OK][0m GET    http://localhost:8000/api/transportador/combustivel/ - Status: 200
+        Listagem de combustível
+[92m[OK][0m GET    http://localhost:8000/api/transportador/multas/    - Status: 200
+        Listagem de multas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/documentos/ - Status: 200
+        Listagem de documentos
+[92m[OK][0m GET    http://localhost:8000/api/transportador/viagens/   - Status: 200
+        Listagem de viagens
+[92m[OK][0m GET    http://localhost:8000/api/transportador/clientes/  - Status: 200
+        Listagem de clientes
+[92m[OK][0m GET    http://localhost:8000/api/transportador/fornecedores/ - Status: 200
+        Listagem de fornecedores
+[92m[OK][0m GET    http://localhost:8000/api/transportador/seguros/   - Status: 200
+        Listagem de seguros
+[92m[OK][0m GET    http://localhost:8000/api/transportador/contratos/ - Status: 200
+        Listagem de contratos
+[92m[OK][0m GET    http://localhost:8000/api/transportador/faturamento/ - Status: 200
+        Listagem de faturamento
+[92m[OK][0m GET    http://localhost:8000/api/transportador/pagamentos/ - Status: 200
+        Listagem de pagamentos
+[92m[OK][0m GET    http://localhost:8000/api/transportador/telemetria/ - Status: 200
+        Listagem de telemetria
+[92m[OK][0m GET    http://localhost:8000/api/transportador/rastreamento/ - Status: 200
+        Listagem de rastreamento
+[92m[OK][0m GET    http://localhost:8000/api/transportador/rotas/     - Status: 200
+        Listagem de rotas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/entregas/  - Status: 200
+        Listagem de entregas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/dashboards/ - Status: 200
+        Listagem de dashboards
+[92m[OK][0m GET    http://localhost:8000/api/transportador/notificacoes/ - Status: 200
+        Listagem de notificações
+[92m[OK][0m GET    http://localhost:8000/api/transportador/almoxarifado/ - Status: 200
+        Listagem de almoxarifado
+[92m[OK][0m GET    http://localhost:8000/api/transportador/relatorios/ - Status: 200
+        Listagem de relatórios
+[92m[OK][0m GET    http://localhost:8000/api/transportador/cargas/    - Status: 200
+        Listagem de cargas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/pecas/     - Status: 200
+        Listagem de peças
+[92m[OK][0m GET    http://localhost:8000/api/transportador/ferramentas/ - Status: 200
+        Listagem de ferramentas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/epis/      - Status: 200
+        Listagem de EPIs
+[92m[OK][0m GET    http://localhost:8000/api/transportador/treinamentos/ - Status: 200
+        Listagem de treinamentos
+[92m[OK][0m GET    http://localhost:8000/api/transportador/compliance/ - Status: 200
+        Listagem de compliance
+[92m[OK][0m GET    http://localhost:8000/api/transportador/alertas/   - Status: 200
+        Listagem de alertas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/integracoes/ - Status: 200
+        Listagem de integrações
+[92m[OK][0m GET    http://localhost:8000/api/transportador/configuracoes/ - Status: 200
+        Listagem de configurações
+[92m[OK][0m GET    http://localhost:8000/api/transportador/empresas/  - Status: 200
+        Listagem de empresas
+[92m[OK][0m GET    http://localhost:8000/api/transportador/financeiro/ - Status: 200
+        Listagem de financeiro
+[92m[OK][0m GET    http://localhost:8000/api/transportador/relatorios_transportador/ - Status: 200
+        Listagem de relatórios transportador
+[92m[OK][0m GET    http://localhost:8000/api/transportador/tr/        - Status: 200
+        Listagem de TR
+[92m[OK][0m GET    http://localhost:8000/api/transportador/implemento/ - Status: 200
+        Listagem de implementos
+[92m[OK][0m GET    http://localhost:8000/api/transportador/analise_pneus/ - Status: 200
+        Listagem de análise de pneus
+[92m[OK][0m GET    http://localhost:8000/api/transportador/garantias/ - Status: 200
+        Listagem de garantias
+[92m[OK][0m GET    http://localhost:8000/api/transportador/auditoria/ - Status: 200
+        Listagem de auditoria
+[92m[OK][0m GET    http://localhost:8000/api/transportador/notas_fiscais/ - Status: 200
+        Listagem de notas fiscais
+[92m[OK][0m GET    http://localhost:8000/api/transportador/ia/        - Status: 200
+        Listagem de IA
+
+[94mResumo: 44/44 endpoints funcionais[0m
+
+[94m============================================================
+Testes de Endpoints Ausentes/Com Problemas
+============================================================[0m
+
+[91m[ERRO][0m GET    http://localhost:8000/api/approve/                 - Status: 404
+        Aprovação de usuários
+[91m[ERRO][0m GET    http://localhost:8000/api/motorista/               - Status: 404
+        Módulo motorista (raiz)
+[91m[ERRO][0m GET    http://localhost:8000/api/borracharia/             - Status: 404
+        Módulo borracharia (raiz)
+[91m[ERRO][0m GET    http://localhost:8000/api/revenda/                 - Status: 404
+        Módulo revenda (raiz)
+[91m[ERRO][0m GET    http://localhost:8000/api/recapagem/               - Status: 404
+        Módulo recapagem (raiz)
+[91m[ERRO][0m GET    http://localhost:8000/api/reports/                 - Status: 404
+        Relatórios (raiz)
+[91m[ERRO][0m GET    http://localhost:8000/api/jobs/                    - Status: 404
+        Jobs (raiz)
+[91m[ERRO][0m GET    http://localhost:8000/api/schema/swagger/          - Status: 404
+        Documentação Swagger
+
+[94m============================================================
+FIM DA VERIFICAÇÃO
+============================================================[0m
+

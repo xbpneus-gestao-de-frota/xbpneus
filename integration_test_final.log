@@ -1,0 +1,102 @@
+
+[94m======================================================================
+BATERIA ABRANGENTE DE TESTES DE INTEGRAÇÃO
+Sistema XBPneus
+======================================================================[0m
+
+
+[94m======================================================================
+                  Teste 1: Conectividade com Backend                  
+======================================================================[0m
+
+[92m✓[0m Conexão com Backend
+  [92m→ Status: 404[0m
+
+[94m======================================================================
+                 Teste 2: Conectividade com Frontend                  
+======================================================================[0m
+
+[92m✓[0m Conexão com Frontend
+  [92m→ Status: 200[0m
+
+[94m======================================================================
+                     Teste 3: Documentação da API                     
+======================================================================[0m
+
+[92m✓[0m Schema OpenAPI
+  [92m→ Documentação acessível[0m
+[92m✓[0m Documentação DRF
+  [92m→ Documentação acessível[0m
+
+[94m======================================================================
+                    Teste 4: Fluxo de Autenticação                    
+======================================================================[0m
+
+[91m✗[0m Login
+  [91m→ Status: 400[0m
+
+[94m======================================================================
+                    Teste 5: Módulo Transportador                     
+======================================================================[0m
+
+[91m✗[0m Módulo Transportador
+  [91m→ Autenticação necessária[0m
+
+[94m======================================================================
+              Teste 6: Endpoints Ausentes/Com Problemas               
+======================================================================[0m
+
+[91m✗[0m Endpoint: Aprovação de Usuários
+  [91m→ Não encontrado (404)[0m
+[91m✗[0m Endpoint: Módulo Motorista (raiz)
+  [91m→ Não encontrado (404)[0m
+[91m✗[0m Endpoint: Módulo Borracharia (raiz)
+  [91m→ Não encontrado (404)[0m
+[91m✗[0m Endpoint: Módulo Revenda (raiz)
+  [91m→ Não encontrado (404)[0m
+[91m✗[0m Endpoint: Módulo Recapagem (raiz)
+  [91m→ Não encontrado (404)[0m
+[91m✗[0m Endpoint: Relatórios (raiz)
+  [91m→ Não encontrado (404)[0m
+[91m✗[0m Endpoint: Jobs (raiz)
+  [91m→ Não encontrado (404)[0m
+
+[94m======================================================================
+                     Teste 7: Páginas do Frontend                     
+======================================================================[0m
+
+[92m✓[0m Página: Página Inicial
+  [92m→ Carregada com sucesso[0m
+[92m✓[0m Página: Login
+  [92m→ Carregada com sucesso[0m
+[92m✓[0m Página: Cadastro
+  [92m→ Carregada com sucesso[0m
+[92m✓[0m Página: Pós-Cadastro
+  [92m→ Carregada com sucesso[0m
+
+[94m======================================================================
+                     Teste 8: Tratamento de Erros                     
+======================================================================[0m
+
+[92m✓[0m Erro 404 - Endpoint Inexistente
+  [92m→ Retorna 404 corretamente[0m
+[92m✓[0m Erro 401 - Token Inválido
+  [92m→ Retorna 401 corretamente[0m
+
+[94m======================================================================
+                         Relatório de Testes                          
+======================================================================[0m
+
+Total de Testes: 19
+[92mPassou: 10[0m
+[91mFalhou: 9[0m
+[93mAvisos: 0[0m
+
+Taxa de Sucesso: 52.6%
+
+Relatório salvo em: /home/ubuntu/xbpneus/test_report.json
+
+[94m======================================================================
+FIM DOS TESTES
+======================================================================[0m
+

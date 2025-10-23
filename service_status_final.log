@@ -1,0 +1,4 @@
+\n--- Verificação de Status dos Serviços ---
+[OK] Redis está rodando.
+[OK] Backend (Django) está rodando (PID: 3584).
+[OK] Frontend (React + Vite) está rodando (PID: 3603).

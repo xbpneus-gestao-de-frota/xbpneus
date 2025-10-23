@@ -9,7 +9,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'transportador.UsuarioTransportador'
 
 AUTHENTICATION_BACKENDS = [
-    'backend.common.backends.CustomAuthBackend',
+    'backend.common.backends.backends.CustomAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

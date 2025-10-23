@@ -20,9 +20,10 @@ echo ""
 
 # Iniciar Backend Django
 echo "[2/4] Iniciando Backend (Django)..."
-cd /home/ubuntu/upload
+cd /home/ubuntu/xbpneus
 python3.11 manage.py runserver 0.0.0.0:8000 > backend.log 2>&1 &
 BACKEND_PID=$!
+echo $BACKEND_PID > backend_pid.txt
 echo "  ✓ Backend iniciado (PID: $BACKEND_PID)"
 echo "  → Logs: backend.log"
 echo ""
@@ -32,9 +33,11 @@ sleep 3
 
 # Iniciar Frontend React
 echo "[3/4] Iniciando Frontend (React + Vite)..."
-cd /home/ubuntu/upload/frontend
+cd /home/ubuntu/xbpneus/frontend
 npm run dev > ../frontend.log 2>&1 &
-FRONTEND_PID=$!
+sleep 5
+FRONTEND_PID=$(lsof -t -i:3000)
+echo $FRONTEND_PID > ../frontend_pid.txt
 echo "  ✓ Frontend iniciado (PID: $FRONTEND_PID)"
 echo "  → Logs: frontend.log"
 echo ""

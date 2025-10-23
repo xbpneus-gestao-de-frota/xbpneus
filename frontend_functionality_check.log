@@ -1,0 +1,6 @@
+
+--- Verificação de Funcionalidades de Frontend (Botões e Telas) ---
+[OK] http://localhost:3000/ - Página carregada com sucesso. Título: XBPNEUS
+[INFO] Botão encontrado na página de login: Entrar
+[OK] http://localhost:3000/cadastro - Página carregada com sucesso. Título: XBPNEUS
+[OK] http://localhost:3000/pos-cadastro - Página carregada com sucesso. Título: XBPNEUS

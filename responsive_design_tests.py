@@ -6,6 +6,7 @@ Testa o carregamento e layout das páginas em diferentes tamanhos de tela
 
 import sys
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -76,8 +77,13 @@ class ResponsiveDesignTester:
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.add_argument("--disable-gpu")
+            chrome_options.add_argument("--headless=new") # Novo modo headless
+            chrome_options.add_argument("--disable-features=RendererCodeIntegrity") # Pode resolver problemas de inicialização
+            chrome_options.add_argument("--window-size=1920,1080") # Definir um tamanho inicial de janela
+            chrome_options.add_argument("--start-maximized") # Maximizar janela ao iniciar
             
-            self.driver = webdriver.Chrome(options=chrome_options)
+            service = Service(executable_path="/usr/bin/chromedriver")
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
             self.print_test("Inicialização do Selenium", "PASS", "Driver configurado")
             return True
         except Exception as e:

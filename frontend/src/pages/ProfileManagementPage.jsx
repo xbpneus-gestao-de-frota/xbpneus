@@ -1,21 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Edit, Key, Save, X } from 'lucide-react';
+import axios from 'axios';
 import { xbpneusClasses, xbpneusColors } from '../styles/colors';
 
 const ProfileManagementPage = () => {
   const [editingProfile, setEditingProfile] = useState(false);
   const [editingPassword, setEditingPassword] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [profileData, setProfileData] = useState({
-    name: 'João Silva',
-    email: 'joao@example.com',
-    phone: '(11) 98765-4321',
-    company: 'Transportes Silva LTDA',
+    nome_completo: '',
+    email: '',
+    telefone: '',
+    empresa: '',
   });
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('/api/users/me/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      setProfileData(response.data);
+    } catch (err) {
+      console.error('Erro ao buscar perfil:', err);
+      setError(err.response?.data?.message || 'Erro ao carregar perfil');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -29,31 +58,64 @@ const ProfileManagementPage = () => {
 
   const handleSaveProfile = async () => {
     try {
-      // Substituir pela chamada real à API
-      // await fetch('/api/auth/me/', { method: 'PUT', body: JSON.stringify(profileData) });
-      alert('Perfil atualizado com sucesso!');
+      const token = localStorage.getItem('access_token');
+      const response = await axios.put(
+        '/api/users/me/',
+        profileData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      setSuccessMessage('Perfil atualizado com sucesso!');
       setEditingProfile(false);
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      alert('Erro ao atualizar perfil');
+      console.error('Erro ao atualizar perfil:', err);
+      setError(err.response?.data?.message || 'Erro ao atualizar perfil');
     }
   };
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('As senhas não correspondem');
+      setError('As senhas não correspondem');
       return;
     }
 
     try {
-      // Substituir pela chamada real à API
-      // await fetch('/api/auth/change-password/', { method: 'POST', body: JSON.stringify(passwordData) });
-      alert('Senha alterada com sucesso!');
+      const token = localStorage.getItem('access_token');
+      const response = await axios.post(
+        '/api/users/change-password/',
+        {
+          old_password: passwordData.currentPassword,
+          new_password: passwordData.newPassword
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      setSuccessMessage('Senha alterada com sucesso!');
       setEditingPassword(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      alert('Erro ao alterar senha');
+      console.error('Erro ao alterar senha:', err);
+      setError(err.response?.data?.message || 'Erro ao alterar senha');
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+        <p className="text-gray-600">Carregando perfil...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -65,6 +127,18 @@ const ProfileManagementPage = () => {
           </h1>
           <p className="text-gray-600">Atualize suas informações pessoais e segurança</p>
         </div>
+
+        {/* Mensagens */}
+        {successMessage && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+            {successMessage}
+          </div>
+        )}
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
         {/* Seção de Edição de Perfil */}
         <div className={`${xbpneusClasses.card} p-6 mb-6`}>
@@ -87,8 +161,8 @@ const ProfileManagementPage = () => {
                 <label className={xbpneusClasses.inputLabel}>Nome Completo</label>
                 <input
                   type="text"
-                  name="name"
-                  value={profileData.name}
+                  name="nome_completo"
+                  value={profileData.nome_completo || ''}
                   onChange={handleProfileChange}
                   className={`${xbpneusClasses.input} w-full mt-1`}
                 />
@@ -98,7 +172,7 @@ const ProfileManagementPage = () => {
                 <input
                   type="email"
                   name="email"
-                  value={profileData.email}
+                  value={profileData.email || ''}
                   onChange={handleProfileChange}
                   className={`${xbpneusClasses.input} w-full mt-1`}
                 />
@@ -107,8 +181,8 @@ const ProfileManagementPage = () => {
                 <label className={xbpneusClasses.inputLabel}>Telefone</label>
                 <input
                   type="tel"
-                  name="phone"
-                  value={profileData.phone}
+                  name="telefone"
+                  value={profileData.telefone || ''}
                   onChange={handleProfileChange}
                   className={`${xbpneusClasses.input} w-full mt-1`}
                 />
@@ -117,8 +191,8 @@ const ProfileManagementPage = () => {
                 <label className={xbpneusClasses.inputLabel}>Empresa</label>
                 <input
                   type="text"
-                  name="company"
-                  value={profileData.company}
+                  name="empresa"
+                  value={profileData.empresa || ''}
                   onChange={handleProfileChange}
                   className={`${xbpneusClasses.input} w-full mt-1`}
                 />
@@ -145,19 +219,19 @@ const ProfileManagementPage = () => {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-gray-600">Nome Completo</p>
-                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.name}</p>
+                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.nome_completo || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Email</p>
-                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.email}</p>
+                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.email || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Telefone</p>
-                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.phone}</p>
+                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.telefone || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Empresa</p>
-                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.company}</p>
+                <p className={`${xbpneusClasses.cardTitle}`}>{profileData.empresa || 'N/A'}</p>
               </div>
             </div>
           )}

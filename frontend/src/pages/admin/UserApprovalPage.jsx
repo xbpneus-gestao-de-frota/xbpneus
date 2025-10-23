@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Search, Filter } from 'lucide-react';
+import axios from 'axios';
 import { xbpneusClasses, xbpneusColors } from '../../styles/colors';
 
 const UserApprovalPage = () => {
@@ -9,52 +10,35 @@ const UserApprovalPage = () => {
   const [filterType, setFilterType] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  // Simular carregamento de usuários pendentes de aprovação
+  // Buscar usuários pendentes de aprovação
   useEffect(() => {
-    const fetchPendingUsers = async () => {
-      try {
-        setLoading(true);
-        // Substituir pela chamada real à API
-        // const response = await fetch('/api/users/pending-approval/');
-        // const data = await response.json();
-        
-        // Dados de exemplo
-        const mockData = [
-          {
-            id: 1,
-            name: 'João Silva',
-            email: 'joao@example.com',
-            userType: 'transportador',
-            registeredAt: '2025-10-20',
-          },
-          {
-            id: 2,
-            name: 'Maria Santos',
-            email: 'maria@example.com',
-            userType: 'motorista',
-            registeredAt: '2025-10-21',
-          },
-          {
-            id: 3,
-            name: 'Carlos Oliveira',
-            email: 'carlos@example.com',
-            userType: 'borracharia',
-            registeredAt: '2025-10-22',
-          },
-        ];
-        
-        setUsers(mockData);
-        setFilteredUsers(mockData);
-        setLoading(false);
-      } catch (err) {
-        setError('Erro ao carregar usuários pendentes de aprovação');
-        setLoading(false);
-      }
-    };
-
     fetchPendingUsers();
   }, []);
+
+  const fetchPendingUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('/api/users/pending/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = response.data.results || response.data || [];
+      setUsers(data);
+      setFilteredUsers(data);
+    } catch (err) {
+      console.error('Erro ao buscar usuários pendentes:', err);
+      setError(err.response?.data?.message || 'Erro ao carregar usuários pendentes de aprovação');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filtrar usuários
   useEffect(() => {
@@ -77,25 +61,45 @@ const UserApprovalPage = () => {
 
   const handleApprove = async (userId) => {
     try {
-      // Substituir pela chamada real à API
-      // await fetch(`/api/users/${userId}/approve/`, { method: 'POST' });
+      const token = localStorage.getItem('access_token');
+      await axios.post(
+        `/api/users/${userId}/approve/`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
       
+      setSuccessMessage('Usuário aprovado com sucesso!');
       setUsers(users.filter((user) => user.id !== userId));
-      alert('Usuário aprovado com sucesso!');
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      alert('Erro ao aprovar usuário');
+      console.error('Erro ao aprovar usuário:', err);
+      setError(err.response?.data?.message || 'Erro ao aprovar usuário');
     }
   };
 
   const handleReject = async (userId) => {
     try {
-      // Substituir pela chamada real à API
-      // await fetch(`/api/users/${userId}/reject/`, { method: 'POST' });
+      const token = localStorage.getItem('access_token');
+      await axios.post(
+        `/api/users/${userId}/reject/`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
       
+      setSuccessMessage('Usuário rejeitado com sucesso!');
       setUsers(users.filter((user) => user.id !== userId));
-      alert('Usuário rejeitado com sucesso!');
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      alert('Erro ao rejeitar usuário');
+      console.error('Erro ao rejeitar usuário:', err);
+      setError(err.response?.data?.message || 'Erro ao rejeitar usuário');
     }
   };
 
@@ -119,6 +123,18 @@ const UserApprovalPage = () => {
             Gerenciar usuários recém-cadastrados que aguardam aprovação
           </p>
         </div>
+
+        {/* Mensagens */}
+        {successMessage && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+            {successMessage}
+          </div>
+        )}
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
         {/* Filtros e Busca */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -181,14 +197,14 @@ const UserApprovalPage = () => {
                     key={user.id}
                     className={index % 2 === 0 ? xbpneusClasses.tableRow : xbpneusClasses.tableRowAlt}
                   >
-                    <td className="px-6 py-4">{user.name}</td>
+                    <td className="px-6 py-4">{user.nome_completo || user.name}</td>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="px-6 py-4">
                       <span className={xbpneusClasses.badgeInfo}>
-                        {userTypeLabels[user.userType]}
+                        {userTypeLabels[user.tipo_usuario || user.userType]}
                       </span>
                     </td>
-                    <td className="px-6 py-4">{user.registeredAt}</td>
+                    <td className="px-6 py-4">{user.data_criacao ? new Date(user.data_criacao).toLocaleDateString('pt-BR') : user.registeredAt}</td>
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-2">
                         <button

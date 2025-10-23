@@ -1,89 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Plus, ToggleLeft, ToggleRight } from 'lucide-react';
+import axios from 'axios';
 import { xbpneusClasses, xbpneusColors } from '../../styles/colors';
 
 const IntegrationsManagementPage = () => {
   const [integrations, setIntegrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  // Simular carregamento de integrações
   useEffect(() => {
-    const fetchIntegrations = async () => {
-      try {
-        setLoading(true);
-        // Substituir pela chamada real à API
-        // const response = await fetch('/api/transportador/integracoes/');
-        // const data = await response.json();
-        
-        // Dados de exemplo
-        const mockData = [
-          {
-            id: 1,
-            name: 'Telemetria GPS',
-            description: 'Integração com sistema de rastreamento de veículos',
-            active: true,
-            icon: '📍',
-          },
-          {
-            id: 2,
-            name: 'ERP Integrado',
-            description: 'Sincronização com sistema ERP da empresa',
-            active: false,
-            icon: '📊',
-          },
-          {
-            id: 3,
-            name: 'Notificações SMS',
-            description: 'Envio de notificações via SMS para motoristas',
-            active: true,
-            icon: '📱',
-          },
-          {
-            id: 4,
-            name: 'Pagamento Online',
-            description: 'Integração com gateway de pagamento',
-            active: false,
-            icon: '💳',
-          },
-        ];
-        
-        setIntegrations(mockData);
-        setLoading(false);
-      } catch (err) {
-        setError('Erro ao carregar integrações');
-        setLoading(false);
-      }
-    };
-
     fetchIntegrations();
   }, []);
 
-  const handleToggleIntegration = async (integrationId) => {
+  const fetchIntegrations = async () => {
     try {
-      // Substituir pela chamada real à API
-      // await fetch(`/api/transportador/integracoes/${integrationId}/toggle/`, { method: 'POST' });
+      setLoading(true);
+      setError(null);
       
-      setIntegrations(
-        integrations.map((integration) =>
-          integration.id === integrationId
-            ? { ...integration, active: !integration.active }
-            : integration
-        )
-      );
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get('/api/integrations/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      setIntegrations(response.data.results || response.data || []);
     } catch (err) {
-      alert('Erro ao atualizar integração');
+      console.error('Erro ao buscar integrações:', err);
+      setError(err.response?.data?.message || 'Erro ao carregar integrações');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleConfigureIntegration = (integrationId) => {
-    // Navegar para página de configuração específica
-    alert(`Configurar integração ${integrationId}`);
+  const handleToggleIntegration = async (integrationId) => {
+    try {
+      const token = localStorage.getItem('access_token');
+      const integration = integrations.find(i => i.id === integrationId);
+      
+      const response = await axios.post(
+        `/api/integrations/${integrationId}/toggle/`,
+        { active: !integration.active },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      setSuccessMessage('Integração atualizada com sucesso!');
+      setIntegrations(
+        integrations.map((int) =>
+          int.id === integrationId
+            ? { ...int, active: !int.active }
+            : int
+        )
+      );
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      console.error('Erro ao atualizar integração:', err);
+      setError(err.response?.data?.message || 'Erro ao atualizar integração');
+    }
+  };
+
+  const handleConfigureIntegration = async (integrationId) => {
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get(
+        `/api/integrations/${integrationId}/`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      // Abrir modal com dados da integração
+      console.log('Dados da integração:', response.data);
+      setSuccessMessage('Carregando configurações...');
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      console.error('Erro ao carregar configurações:', err);
+      setError(err.response?.data?.message || 'Erro ao carregar configurações');
+    }
   };
 
   const handleAddIntegration = () => {
     // Abrir modal ou navegar para página de adição de integração
-    alert('Adicionar nova integração');
+    setSuccessMessage('Função de adicionar integração em desenvolvimento');
+    setTimeout(() => setSuccessMessage(null), 3000);
   };
 
   return (
@@ -110,12 +116,24 @@ const IntegrationsManagementPage = () => {
           </div>
         </div>
 
+        {/* Mensagens */}
+        {successMessage && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+            {successMessage}
+          </div>
+        )}
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
         {/* Conteúdo */}
         {loading ? (
           <div className="text-center py-12">
             <p className="text-gray-600">Carregando integrações...</p>
           </div>
-        ) : error ? (
+        ) : error && !successMessage ? (
           <div className="text-center py-12">
             <p className="text-red-600">{error}</p>
           </div>

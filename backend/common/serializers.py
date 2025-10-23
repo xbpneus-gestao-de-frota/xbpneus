@@ -3,16 +3,29 @@ from rest_framework import serializers
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        # Primeiro, valida as credenciais normalmente
-        data = super().validate(attrs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove o campo 'username' e adiciona 'email'
+        self.fields.pop(self.username_field, None)
+        self.fields['email'] = serializers.CharField(write_only=True)
+        self.fields['password'] = serializers.CharField(write_only=True)
         
-        # Verifica se o usuário está aprovado
-        if hasattr(self.user, 'aprovado') and not self.user.aprovado:
+    def validate(self, attrs):
+        # O TokenObtainPairSerializer espera 'username' no attrs para a validação padrão.
+        # Precisamos mapear 'email' para 'username' antes de chamar super().validate.
+        attrs[self.username_field] = attrs['email']
+        
+        # Chama a validação padrão (autentica o usuário e verifica is_active)
+        data = super().validate(attrs)
+
+        # Autenticação bem-sucedida, agora verifica o campo 'aprovado'
+        user = self.user
+        
+        if hasattr(user, 'aprovado') and not user.aprovado:
             raise serializers.ValidationError(
                 {'detail': 'Usuário não aprovado pelo administrador.'}
             )
-        
+
         return data
     
     @classmethod

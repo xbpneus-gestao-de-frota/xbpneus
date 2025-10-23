@@ -1,4 +1,4 @@
-# Dependências de Produção - Sistema XBPneus
+# Dependências de Produção - Sistema XBPneus (Atualizado)
 
 # Core
 Django==4.2.11
@@ -6,22 +6,23 @@ djangorestframework==3.14.0
 python-decouple==3.8
 
 # Database
-psycopg2-binary==2.9.9  # PostgreSQL
+psycopg2-binary==2.9.9
 dj-database-url==2.1.0
 
-# Authentication & Security
+# Auth & Security
 djangorestframework-simplejwt==5.3.1
 django-cors-headers==4.3.1
 django-axes==6.1.1
 cryptography==42.0.5
 
-# API Documentation
+# API Docs
 drf-spectacular==0.27.1
+drf-spectacular-sidecar
 
-# Cache & Performance
+# Cache
 django-redis==5.2.0
 redis==4.5.5
-
+hiredis==2.0.0
 
 # Background Jobs
 django-rq==2.10.2
@@ -29,9 +30,19 @@ rq==1.16.2
 
 # File Storage
 Pillow==10.2.0
+django-storages
+boto3
 
-# Monitoring & Logging
+# Mídia
+ffmpeg-python
+
+# Auth Social/Push
+django-allauth
+pyfcm
+
+# Monitoring
 sentry-sdk==1.43.0
+python-json-logger
 
 # Server
 gunicorn==21.2.0
@@ -41,28 +52,7 @@ whitenoise==6.6.0
 django-filter==24.1
 python-dateutil==2.9.0
 pytz==2024.1
-
-# Excel/CSV
+validators==0.22.0
 openpyxl==3.1.2
 xlsxwriter==3.2.0
-
-# Validations
-validators==0.22.0
-
-
-
-django-filter
-
-
-python-json-logger
-
-
-drf-spectacular-sidecar
-
-
-django-health-check
-
-
-
-hiredis==2.0.0
 

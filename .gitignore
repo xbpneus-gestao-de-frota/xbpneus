@@ -20,3 +20,15 @@ staticfiles/
 installed_packages.txt
 pytest_results.txt
 
+
+
+# Arquivos de Log e Relatório Gerados
+POST_DEPLOY_VALIDATION_REPORT.md
+api_validation_report*.txt
+validation_report.txt
+super_deploy_analysis.md
+
+# Scripts de Teste Temporários
+api_validation_test.py
+super_deploy_validation_test.py
+

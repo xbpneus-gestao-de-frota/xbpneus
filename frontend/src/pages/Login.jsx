@@ -24,10 +24,15 @@ export default function Login() {
       console.error("Login failed:", error);
       if (error.response && error.response.data && error.response.data.detail) {
         setMsg(error.response.data.detail);
+      } else if (error.response?.status === 401) {
+        // Tratamento específico para 401 (Unauthorized)
+        setMsg("E-mail ou senha inválidos. Verifique suas credenciais.");
       } else if (error.response?.status === 403) {
-        setMsg("Usuário aguardando aprovação do administrador.");
+        // Tratamento para 403 (Forbidden) - Pode ser bloqueio (AXES) ou não aprovado
+        // O backend deve retornar uma mensagem específica, mas usamos um fallback
+        setMsg(error.response.data?.error || "Acesso negado. Sua conta pode estar inativa, não aprovada ou bloqueada por segurança.");
       } else {
-        setMsg(error.message || "Falha no login. Verifique usuário/senha.");
+        setMsg(error.message || "Falha no login. Verifique sua conexão ou tente novamente.");
       }
     } finally {
       setLoading(false);

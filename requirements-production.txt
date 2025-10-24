@@ -1,4 +1,4 @@
-# Dependências de Produção - Sistema XBPneus
+# Dependências de Produção - Sistema XBPneus (ALINHADO)
 
 # Core
 Django==4.2.11
@@ -17,11 +17,15 @@ cryptography==42.0.5
 
 # API Documentation
 drf-spectacular==0.27.1
+drf-spectacular-sidecar==2025.10.1  # Adicionado: Necessário para assets do Swagger UI
 
-# Cache & Performance
-django-redis==5.4.0
-redis==5.0.3
-hiredis==2.3.2
+# Health Check
+django-health-check==3.20.0  # Adicionado: Necessário para o health_check
+
+# Cache & Performance (Versões alinhadas com requirements.txt)
+django-redis==5.2.0
+redis==4.5.5
+hiredis==2.0.0
 
 # Background Jobs
 django-rq==2.10.2
@@ -29,9 +33,12 @@ rq==1.16.2
 
 # File Storage
 Pillow==10.2.0
+# django-storages e boto3 não estão pinados no requirements.txt, mas estão instalados na versão 1.14.6 e 1.40.58, respectivamente.
+# Mantendo o pin do requirements.txt para Pillow.
 
 # Monitoring & Logging
 sentry-sdk==1.43.0
+python-json-logger==4.0.0  # Adicionado: Necessário para JsonFormatter
 
 # Server
 gunicorn==21.2.0
@@ -48,4 +55,12 @@ xlsxwriter==3.2.0
 
 # Validations
 validators==0.22.0
+
+# Dependências que estavam no requirements.txt mas não no requirements-production.txt
+# django-storages (1.14.6)
+# boto3 (1.40.58)
+# ffmpeg-python (0.2.0)
+# django-allauth (65.1.0)
+# pyfcm (2.1.0)
+# Deixando de fora por enquanto, pois o foco foi nas libs *faltantes* e no alinhamento do cache.
 

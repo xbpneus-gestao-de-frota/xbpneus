@@ -44,7 +44,7 @@ def try_include(prefix: str, module_path: str):
 
 # Módulos principais
 try_include("api/transportador/", "backend.transportador.urls")
-try_include("api/motorista/", "backend.motorista.urls")
+try_include("api/motorista/", "backend.motorista.urls") # Rotas de login/cadastro removidas. Apenas perfil e rotas externas permanecem.
 try_include("api/borracharia/", "backend.borracharia.urls")
 try_include("api/revenda/", "backend.revenda.urls")
 try_include("api/recapagem/", "backend.recapagem.urls")

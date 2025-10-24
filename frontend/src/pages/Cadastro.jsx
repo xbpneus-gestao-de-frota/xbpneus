@@ -98,29 +98,8 @@ export default function Cadastro() {
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       
-      // Mapear tipo de cliente para o endpoint correto
-      let endpoint = '';
-      switch(form.tipo_cliente) {
-        case 'transportador':
-          endpoint = '/api/transportador/register/';
-          break;
-        case 'motorista':
-          endpoint = '/api/motorista/register/';
-          break;
-        case 'revenda':
-          endpoint = '/api/revenda/register/';
-          break;
-        case 'borracharia':
-          endpoint = '/api/borracharia/register/';
-          break;
-        case 'recapagem':
-          endpoint = '/api/recapagem/register/';
-          break;
-        default:
-          setMessage('Tipo de usuário inválido');
-          setLoading(false);
-          return;
-      }
+      // Usar o endpoint de registro full para todos os tipos de usuário (Backend faz o roteamento)
+      const endpoint = '/api/users/register_full/';
       
       // Preparar payload
       const payload = {

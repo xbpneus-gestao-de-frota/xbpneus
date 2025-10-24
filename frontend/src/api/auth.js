@@ -58,22 +58,7 @@ export async function login(email, password) {
   } catch (primaryError) {
     const status = primaryError.response?.status;
 
-    if (status === 400 || status === 401 || status === 404) {
-      try {
-        const { data } = await api.post(`/api/motorista/login/?t=${timestamp}`, { email, password });
-        const tokens = data.tokens || {};
-        const session = persistSession(tokens.access, tokens.refresh, "motorista");
 
-        // Se o backend informar uma URL específica de redirecionamento, priorize-a
-        const redirectUrl = data.redirect || session.redirectUrl;
-        localStorage.setItem("redirect_url", redirectUrl);
-
-        return { userRole: session.userRole, redirectUrl };
-      } catch (motoristaError) {
-        console.error("Erro no login do motorista:", motoristaError);
-        wrapAndThrow(motoristaError);
-      }
-    }
 
     console.error("Erro no login principal:", primaryError);
     wrapAndThrow(primaryError);
